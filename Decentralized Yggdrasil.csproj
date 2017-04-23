@@ -31,10 +31,37 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\MainClass.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\YggdrasilServer.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\Error.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\StandardErrors.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\StandardErrorException.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\IApi.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\Agent.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\Profile.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\Property.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\User.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\LoginRequest.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\LoginApi.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\RefreshRequest.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\AuthenticationResponse.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\RefreshApi.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\ValidateRequest.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\ValidateApi.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\SignOutRequest.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\SignOutApi.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\InvalidateRequest.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\InvalidateApi.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\JoinServerRequest.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\JoinApi.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\UserProfile.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\CheckJoinApi.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -42,5 +69,19 @@
     <Folder Include="Com\GitHub\" />
     <Folder Include="Com\GitHub\ZachDeibert\" />
     <Folder Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\" />
+    <Folder Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\" />
+    <Folder Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="Hierarchical" ResourceNamePolicy="FileFormatDefault" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>
