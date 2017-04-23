@@ -21,7 +21,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 
 		public object Run(object param, Uri uri) {
 			LoginRequest req = (LoginRequest) param;
-			return new AuthenticationResponse("deadbeef", req.ClientId, req.IncludeUser ? new User("deadbeef") : null, new Profile("deadbeef", "Zach"));
+			return new AuthenticationResponse(Guid.Empty, req.ClientId, req.IncludeUser ? new User(Guid.Empty) : null, new Profile(Guid.Empty, "Zach"));
 		}
 	}
 }

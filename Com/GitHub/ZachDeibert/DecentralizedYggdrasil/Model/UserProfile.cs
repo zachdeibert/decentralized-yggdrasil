@@ -9,11 +9,11 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 		public UserProfile() {
 		}
 
-		public UserProfile(string id, string name) : base(id) {
+		public UserProfile(Guid id, string name) : base(id) {
 			Name = name;
 		}
 
-		public UserProfile(string id, string name, params Property[] properties) : base(id, properties) {
+		public UserProfile(Guid id, string name, params Property[] properties) : base(id, properties) {
 			Name = name;
 		}
 	}

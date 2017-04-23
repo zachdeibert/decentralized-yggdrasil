@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 	public class User {
 		[JsonProperty("id")]
-		public string Id;
+		public Guid Id;
 		[JsonProperty("properties")]
 		public List<Property> Properties;
 
@@ -13,11 +13,11 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 			Properties = new List<Property>();
 		}
 
-		public User(string id) : this() {
+		public User(Guid id) : this() {
 			Id = id;
 		}
 
-		public User(string id, params Property[] properties) : this(id) {
+		public User(Guid id, params Property[] properties) : this(id) {
 			Properties.AddRange(properties);
 		}
 	}

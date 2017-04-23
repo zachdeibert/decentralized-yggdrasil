@@ -10,7 +10,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 		[JsonProperty("password")]
 		public string Password;
 		[JsonProperty("clientToken")]
-		public string ClientId;
+		public Guid ClientId;
 		[JsonProperty("requestUser")]
 		public bool IncludeUser;
 	}

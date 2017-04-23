@@ -20,7 +20,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 		}
 
 		public object Run(object param, Uri uri) {
-			return new UserProfile("deadbeef", "Zach");
+			return new UserProfile(Guid.Empty, "Zach");
 		}
 	}
 }

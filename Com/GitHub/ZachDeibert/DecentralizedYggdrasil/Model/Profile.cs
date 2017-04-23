@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 	public class Profile {
 		[JsonProperty("id")]
-		public string Id;
+		public Guid Id;
 		[JsonProperty("name")]
 		public string Name;
 		[JsonProperty("legacy")]
@@ -13,13 +13,13 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 		public Profile() {
 		}
 
-		public Profile(string id, string name, bool isLegacy) {
+		public Profile(Guid id, string name, bool isLegacy) {
 			Id = id;
 			Name = name;
 			IsLegacy = isLegacy;
 		}
 
-		public Profile(string id, string name) {
+		public Profile(Guid id, string name) {
 			Id = id;
 			Name = name;
 		}
