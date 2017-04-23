@@ -13,7 +13,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 		private List<IApi> Apis;
 
 		private void CheckRequest(HttpListenerRequest req) {
-			if (req.HttpMethod == "POST" && req.Headers.Get("Content-Type") != "application/json") {
+			if (req.HttpMethod == "POST" && req.Headers.Get("Content-Type").Split(';')[0] != "application/json") {
 				throw new StandardErrorException(StandardErrors.InvalidType, 415, "Unsupported Media Type");
 			}
 		}
