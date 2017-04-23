@@ -15,6 +15,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 			}
 		}
 
+		public void Init(YggdrasilServer server) {
+		}
+
 		public bool IsAcceptable(Uri uri) {
 			return uri.AbsolutePath == "/refresh";
 		}

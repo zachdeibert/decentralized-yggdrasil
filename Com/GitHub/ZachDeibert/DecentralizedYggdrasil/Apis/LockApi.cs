@@ -1,29 +1,32 @@
 ﻿using System;
-using Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
-	public class InvalidateApi : IApi {
+	public class Lock : IApi {
+		private YggdrasilServer Server;
+
 		public Type ParamType {
 			get {
-				return typeof(InvalidateRequest);
+				return null;
 			}
 		}
 
 		public string Method {
 			get {
-				return "POST";
+				return "GET";
 			}
 		}
 
 		public void Init(YggdrasilServer server) {
+			Server = server;
+			server.NumClients = 0;
 		}
 
 		public bool IsAcceptable(Uri uri) {
-			return uri.AbsolutePath == "/invalidate";
+			return uri.AbsolutePath == "/cghzddy/lock";
 		}
 
 		public object Run(object param, Uri uri) {
-			InvalidateRequest req = (InvalidateRequest) param;
+			++Server.NumClients;
 			return null;
 		}
 	}

@@ -10,6 +10,8 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 			get;
 		}
 
+		void Init(YggdrasilServer server);
+
 		bool IsAcceptable(Uri uri);
 
 		object Run(object param, Uri uri);

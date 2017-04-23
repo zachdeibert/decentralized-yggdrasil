@@ -11,6 +11,8 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 	public class YggdrasilServer {
 		private HttpListener Listener;
 		private List<IApi> Apis;
+		public int NumClients;
+		public event Action OnStop;
 
 		private void CheckRequest(HttpListenerRequest req) {
 			if (req.HttpMethod == "POST" && req.Headers.Get("Content-Type").Split(';')[0] != "application/json") {
@@ -74,7 +76,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 			Apis = new List<IApi>();
 			foreach (Type t in Assembly.GetExecutingAssembly().GetTypes()) {
 				if (typeof(IApi).IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface) {
-					Apis.Add((IApi) t.GetConstructor(new Type[0]).Invoke(new object[0]));
+					IApi api = (IApi) t.GetConstructor(new Type[0]).Invoke(new object[0]);
+					Apis.Add(api);
+					api.Init(this);
 				}
 			}
 			Listener.Start();
@@ -83,6 +87,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 
 		public void Stop() {
 			Listener.Stop();
+			if (OnStop != null) {
+				OnStop();
+			}
 		}
 
 		public YggdrasilServer(int port) {

@@ -62,6 +62,8 @@
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\JoinApi.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\UserProfile.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\CheckJoinApi.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\LockApi.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\UnLockApi.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
