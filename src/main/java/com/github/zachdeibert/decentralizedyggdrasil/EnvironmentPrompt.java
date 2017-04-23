@@ -72,12 +72,6 @@ public class EnvironmentPrompt extends JFrame {
 		contentPane.add(btnAddLauncher);
 		JButton btnDelete = new JButton("Remove");
 		btnDelete.setEnabled(false);
-		btnDelete.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				launchers.remove(list.getSelectedValue());
-			}
-		});
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnDelete, 6, SpringLayout.EAST, btnAddLauncher);
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override
@@ -106,70 +100,90 @@ public class EnvironmentPrompt extends JFrame {
 				}
 			}
 		};
+		JMenuItem mntmVanilla = new JMenuItem("Vanilla");
+		mntmVanilla.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (launchers.install(Launcher.VANILLA)) {
+					popupMenu.remove(mntmVanilla);
+					if (popupMenu.getComponentCount() == 1) {
+						btnAddLauncher.addActionListener(selectJar);
+						btnAddLauncher.removeMouseListener(popup);
+					}
+				} else {
+					JOptionPane.showMessageDialog(EnvironmentPrompt.this, "Unable to install launcher",
+							"Installation Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		if (!launchers.isInstalled(Launcher.VANILLA)) {
-			JMenuItem mntmVanilla = new JMenuItem("Vanilla");
 			popupMenu.add(mntmVanilla);
-			mntmVanilla.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (launchers.install(Launcher.VANILLA)) {
-						popupMenu.remove(mntmVanilla);
-						if (popupMenu.getComponentCount() == 1) {
-							btnAddLauncher.addActionListener(selectJar);
-							btnAddLauncher.removeMouseListener(popup);
-						}
-					} else {
-						JOptionPane.showMessageDialog(EnvironmentPrompt.this, "Unable to install launcher",
-								"Installation Error", JOptionPane.ERROR_MESSAGE);
-					}
-				}
-			});
 		}
+		JMenuItem mntmFtb = new JMenuItem("FTB");
+		mntmFtb.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (launchers.install(Launcher.FTB)) {
+					popupMenu.remove(mntmFtb);
+					if (popupMenu.getComponentCount() == 1) {
+						btnAddLauncher.addActionListener(selectJar);
+						btnAddLauncher.removeMouseListener(popup);
+					}
+				} else {
+					JOptionPane.showMessageDialog(EnvironmentPrompt.this, "Unable to install launcher",
+							"Installation Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		if (!launchers.isInstalled(Launcher.FTB)) {
-			JMenuItem mntmFtb = new JMenuItem("FTB");
 			popupMenu.add(mntmFtb);
-			mntmFtb.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (launchers.install(Launcher.FTB)) {
-						popupMenu.remove(mntmFtb);
-						if (popupMenu.getComponentCount() == 1) {
-							btnAddLauncher.addActionListener(selectJar);
-							btnAddLauncher.removeMouseListener(popup);
-						}
-					} else {
-						JOptionPane.showMessageDialog(EnvironmentPrompt.this, "Unable to install launcher",
-								"Installation Error", JOptionPane.ERROR_MESSAGE);
-					}
-				}
-			});
 		}
+		JMenuItem mntmTechnic = new JMenuItem("Technic");
+		mntmTechnic.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (launchers.install(Launcher.TECHNIC)) {
+					popupMenu.remove(mntmTechnic);
+					if (popupMenu.getComponentCount() == 1) {
+						btnAddLauncher.addActionListener(selectJar);
+						btnAddLauncher.removeMouseListener(popup);
+					}
+				} else {
+					JOptionPane.showMessageDialog(EnvironmentPrompt.this, "Unable to install launcher",
+							"Installation Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		if (!launchers.isInstalled(Launcher.TECHNIC)) {
-			JMenuItem mntmTechnic = new JMenuItem("Technic");
 			popupMenu.add(mntmTechnic);
-			mntmTechnic.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (launchers.install(Launcher.TECHNIC)) {
-						popupMenu.remove(mntmTechnic);
-						if (popupMenu.getComponentCount() == 1) {
-							btnAddLauncher.addActionListener(selectJar);
-							btnAddLauncher.removeMouseListener(popup);
-						}
-					} else {
-						JOptionPane.showMessageDialog(EnvironmentPrompt.this, "Unable to install launcher",
-								"Installation Error", JOptionPane.ERROR_MESSAGE);
-					}
-				}
-			});
 		}
+		JMenuItem mntmSelectJar = new JMenuItem("Select Jar...");
+		popupMenu.add(mntmSelectJar);
 		if (popupMenu.getComponentCount() > 0) {
-			JMenuItem mntmSelectJar = new JMenuItem("Select Jar...");
-			popupMenu.add(mntmSelectJar);
 			btnAddLauncher.addMouseListener(popup);
 		} else {
 			btnAddLauncher.addActionListener(selectJar);
 		}
+		btnDelete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Launcher launcher = list.getSelectedValue();
+				launchers.remove(launcher);
+				if (launcher.equals(Launcher.VANILLA)) {
+					popupMenu.add(mntmVanilla);
+				} else if (launcher.equals(Launcher.FTB)) {
+					popupMenu.add(mntmFtb);
+				} else if (launcher.equals(Launcher.TECHNIC)) {
+					popupMenu.add(mntmTechnic);
+				} else {
+					return;
+				}
+				if (popupMenu.getComponentCount() == 2) {
+					btnAddLauncher.removeActionListener(selectJar);
+					btnAddLauncher.addMouseListener(popup);
+				}
+			}
+		});
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnDelete, 0, SpringLayout.SOUTH, btnLaunch);
 		contentPane.add(btnDelete);
 	}
