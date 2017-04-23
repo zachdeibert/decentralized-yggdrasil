@@ -74,6 +74,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="build\libs\decentralized-yggdrasil.jar">
+      <Link>decentralized-yggdrasil.jar</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
@@ -84,4 +88,10 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <ProjectReference Include="ssl-endpoint\ssl-endpoint.csproj">
+      <Project>{2DFEB98E-9BA9-48A8-84EF-0C2C58365A60}</Project>
+      <Name>ssl-endpoint</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
