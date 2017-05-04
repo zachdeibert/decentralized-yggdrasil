@@ -6,7 +6,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 	public class ServerCommand : ICommand {
 		public string Name {
 			get {
-				return null;
+				return "server";
 			}
 		}
 
