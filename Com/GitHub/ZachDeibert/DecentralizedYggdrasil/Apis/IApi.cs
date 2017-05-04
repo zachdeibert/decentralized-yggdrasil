@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 	public interface IApi {
@@ -10,7 +12,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 			get;
 		}
 
-		void Init(YggdrasilServer server);
+		void Init(YggdrasilServer server, List<UserData> users);
 
 		bool IsAcceptable(Uri uri);
 

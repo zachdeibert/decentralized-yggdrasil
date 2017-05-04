@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
+	[XmlType("property")]
 	public class Property {
-		[JsonProperty("name")]
+		[JsonProperty("name"), XmlElement("key")]
 		public string Key;
-		[JsonProperty("value")]
+		[JsonProperty("value"), XmlElement("value")]
 		public string Value;
 
 		public Property() {

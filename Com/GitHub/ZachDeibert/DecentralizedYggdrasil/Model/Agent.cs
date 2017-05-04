@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
@@ -6,9 +7,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 		public static readonly Agent Minecraft = new Agent("Minecraft", 1);
 		public static readonly Agent Scrolls = new Agent("Scrolls", 1);
 
-		[JsonProperty("name")]
+		[JsonProperty("name"), XmlElement("name")]
 		public string Name;
-		[JsonProperty("version")]
+		[JsonProperty("version"), XmlElement("version")]
 		public int Version;
 
 		public Agent() {

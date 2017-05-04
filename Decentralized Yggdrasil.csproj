@@ -34,6 +34,8 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\MainClass.cs" />
@@ -65,6 +67,15 @@
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\LockApi.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\UnLockApi.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\HostsFile.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\UserData.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\UserDataList.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\Pair.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\ICommand.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\DefaultCommand.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\ServerCommand.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\CreateUserCommand.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\CheckPasswordCommand.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\ChangePasswordCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -74,6 +85,7 @@
     <Folder Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\" />
     <Folder Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\" />
     <Folder Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\" />
+    <Folder Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

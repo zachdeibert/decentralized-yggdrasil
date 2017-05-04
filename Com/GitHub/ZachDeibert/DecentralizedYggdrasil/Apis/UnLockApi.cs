@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 	public class UnLockApi : IApi {
@@ -16,7 +18,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 			}
 		}
 
-		public void Init(YggdrasilServer server) {
+		public void Init(YggdrasilServer server, List<UserData> users) {
 			Server = server;
 		}
 

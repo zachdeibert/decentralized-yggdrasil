@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -74,11 +75,12 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 
 		public void Start() {
 			Apis = new List<IApi>();
+			UserDataList users = UserDataList.Load();
 			foreach (Type t in Assembly.GetExecutingAssembly().GetTypes()) {
 				if (typeof(IApi).IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface) {
 					IApi api = (IApi) t.GetConstructor(new Type[0]).Invoke(new object[0]);
 					Apis.Add(api);
-					api.Init(this);
+					api.Init(this, users);
 				}
 			}
 			Listener.Start();
