@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 	public class CheckJoinApi : IApi {
+		private List<UserData> Users;
+
 		public Type ParamType {
 			get {
 				return null;
@@ -17,6 +20,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 		}
 
 		public void Init(YggdrasilServer server, List<UserData> users) {
+			Users = users;
 		}
 
 		public bool IsAcceptable(Uri uri) {
@@ -24,7 +28,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 		}
 
 		public object Run(object param, Uri uri) {
-			return new UserProfile(Guid.Empty, "Zach");
+			string email = uri.Query.Split('&').First(q => q.StartsWith("username=")).Split('=')[1];
+			UserData user = Users.First(u => u.Email == email);
+			return user.Profiles.First();
 		}
 	}
 }
