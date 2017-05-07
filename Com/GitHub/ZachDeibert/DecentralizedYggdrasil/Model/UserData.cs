@@ -42,7 +42,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 			RSA rsa = RSA.Create();
 			EncryptedPrivateKey = EncryptString(aes, rsa.ToXmlString(true));
 			XmlDocument doc = new XmlDocument();
-			doc.LoadXml(rsa.ToXmlString(false));
+			doc.LoadXml(rsa.ToCamelXmlString(false));
 			PublicKey = doc.DocumentElement;
 		}
 
