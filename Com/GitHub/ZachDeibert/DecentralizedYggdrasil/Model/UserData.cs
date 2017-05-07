@@ -27,6 +27,18 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 		[XmlAnyElement("RSAKeyValue")]
 		public XmlNode PublicKey;
 
+		public RSACryptoServiceProvider RSAPublicKey {
+			get {
+				StringBuilder str = new StringBuilder();
+				using (XmlWriter writer = XmlWriter.Create(str)) {
+					PublicKey.WriteTo(writer);
+				}
+				RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+				rsa.FromCamelXmlString(str.ToString());
+				return rsa;
+			}
+		}
+
 		public void InitEncryption(string password) {
 			Aes aes = Aes.Create();
 			aes.GenerateIV();

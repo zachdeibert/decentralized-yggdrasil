@@ -9,6 +9,10 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 		private const string FileName = "transient.xml";
 		[XmlArray("accessTokens")]
 		public List<Pair<Guid, Guid>> AccessTokens;
+		[XmlArray("privateKeys")]
+		public List<DecryptedPrivateKey> Keys;
+		[XmlArray("joined")]
+		public List<JoinedServer> JoinedServers;
 
 		public static TransientStateData Load() {
 			if (File.Exists(FileName)) {
@@ -30,6 +34,8 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 
 		public TransientStateData() {
 			AccessTokens = new List<Pair<Guid, Guid>>();
+			Keys = new List<DecryptedPrivateKey>();
+			JoinedServers = new List<JoinedServer>();
 		}
 	}
 }
