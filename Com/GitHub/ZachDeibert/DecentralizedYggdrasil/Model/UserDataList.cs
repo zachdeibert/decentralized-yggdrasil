@@ -21,7 +21,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 
 		public static void Save(UserDataList users) {
 			XmlSerializer ser = new XmlSerializer(typeof(UserDataList));
-			using (Stream stream = new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.Write)) {
+			using (Stream stream = File.Create(FileName)) {
 				ser.Serialize(stream, users);
 			}
 		}

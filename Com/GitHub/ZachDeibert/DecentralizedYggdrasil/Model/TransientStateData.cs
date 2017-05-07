@@ -23,7 +23,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 
 		public static void Save(TransientStateData data) {
 			XmlSerializer ser = new XmlSerializer(typeof(TransientStateData));
-			using (Stream stream = new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.Write)) {
+			using (Stream stream = File.Create(FileName)) {
 				ser.Serialize(stream, data);
 			}
 		}
