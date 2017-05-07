@@ -11,6 +11,8 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 		public List<Pair<Guid, Guid>> AccessTokens;
 		[XmlArray("privateKeys")]
 		public List<DecryptedPrivateKey> Keys;
+		[XmlArray("upstream")]
+		public List<string> UpstreamServers;
 		[XmlArray("joined")]
 		public List<JoinedServer> JoinedServers;
 
@@ -35,6 +37,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 		public TransientStateData() {
 			AccessTokens = new List<Pair<Guid, Guid>>();
 			Keys = new List<DecryptedPrivateKey>();
+			UpstreamServers = new List<string>();
 			JoinedServers = new List<JoinedServer>();
 		}
 	}

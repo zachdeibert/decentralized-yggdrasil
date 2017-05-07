@@ -80,6 +80,8 @@
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\DecryptedPrivateKey.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\CryptoExtensions.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\JoinedServer.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\JoinBroadcastApi.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\UpstreamCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
