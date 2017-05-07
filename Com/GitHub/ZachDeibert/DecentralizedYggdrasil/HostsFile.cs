@@ -42,7 +42,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 					FilePath = "/etc/hosts";
 					break;
 				default:
-					FilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Drivers", "etc", "hosts");
+					FilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "Drivers", "etc", "hosts");
 					break;
 			}
 		}

@@ -44,7 +44,11 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 			File.WriteAllBytes("mojang.cer", cert.Export(X509ContentType.Cert));
 			Process mc = Process.Start("java", "-jar decentralized-yggdrasil.jar mojang.cer");
 			mc.WaitForExit();
-			WebRequest.Create("http://localhost:56195/cghzddy/unlock").GetResponse().Close();
+			try {
+				WebRequest.Create("http://localhost:56195/cghzddy/unlock").GetResponse().Close();
+			} catch (Exception ex) {
+				Console.Error.WriteLine(ex);
+			}
 		}
 	}
 }
