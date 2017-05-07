@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 	public class SignOutApi : IApi {
+		private List<UserData> Users;
+		private TransientStateData State;
+
 		public Type ParamType {
 			get {
 				return typeof(SignOutRequest);
@@ -16,7 +20,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 			}
 		}
 
-		public void Init(YggdrasilServer server, List<UserData> users) {
+		public void Init(YggdrasilServer server, List<UserData> users, TransientStateData state) {
+			Users = users;
+			State = state;
 		}
 
 		public bool IsAcceptable(Uri uri) {
@@ -24,6 +30,15 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 		}
 
 		public object Run(object param, Uri uri) {
+			SignOutRequest req = (SignOutRequest) param;
+			UserData user = Users.FirstOrDefault(u => u.Email == req.Email);
+			if (user == null) {
+				throw new StandardErrorException(StandardErrors.InvalidCredentials, 403, "Forbidden");
+			} else if (user.GetPrivateKey(req.Password) == null) {
+				throw new StandardErrorException(StandardErrors.InvalidCredentials, 403, "Forbidden");
+			} else {
+				State.AccessTokens.RemoveAll(p => user.Profiles.Any(p2 => p.Key == p2.Id));
+			}
 			return null;
 		}
 	}

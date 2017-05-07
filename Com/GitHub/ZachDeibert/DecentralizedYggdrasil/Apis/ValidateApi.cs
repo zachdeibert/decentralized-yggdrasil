@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 	public class ValidateApi : IApi {
+		private TransientStateData State;
+
 		public Type ParamType {
 			get {
 				return typeof(ValidateRequest);
@@ -16,7 +19,8 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 			}
 		}
 
-		public void Init(YggdrasilServer server, List<UserData> users) {
+		public void Init(YggdrasilServer server, List<UserData> users, TransientStateData state) {
+			State = state;
 		}
 
 		public bool IsAcceptable(Uri uri) {
@@ -24,6 +28,10 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 		}
 
 		public object Run(object param, Uri uri) {
+			ValidateRequest req = (ValidateRequest) param;
+			if (!State.AccessTokens.Any(p => p.Key == req.AccessToken)) {
+				throw new StandardErrorException(StandardErrors.InvalidToken, 403, "Forbidden");
+			}
 			return null;
 		}
 	}

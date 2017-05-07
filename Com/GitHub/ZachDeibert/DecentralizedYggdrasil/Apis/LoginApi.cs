@@ -6,6 +6,7 @@ using Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model;
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 	public class LoginApi : IApi {
 		private List<UserData> Users;
+		private TransientStateData State;
 
 		public Type ParamType {
 			get {
@@ -19,8 +20,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 			}
 		}
 
-		public void Init(YggdrasilServer server, List<UserData> users) {
+		public void Init(YggdrasilServer server, List<UserData> users, TransientStateData state) {
 			Users = users;
+			State = state;
 		}
 
 		public bool IsAcceptable(Uri uri) {
@@ -35,7 +37,10 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 			} else if (user.GetPrivateKey(req.Password) == null) {
 				throw new StandardErrorException(StandardErrors.InvalidCredentials, 403, "Forbidden");
 			} else {
-				return new AuthenticationResponse(Guid.Empty, req.ClientId, req.IncludeUser ? user.User : null, (user.DefaultProfiles.FirstOrDefault(p => p.Key.Name == req.Agent.Name) ?? new Pair<Agent, Profile>(null, null)).Value);
+				Guid token = Guid.NewGuid();
+				Profile profile = (user.DefaultProfiles.FirstOrDefault(p => p.Key.Name == req.Agent.Name) ?? new Pair<Agent, Profile>(null, null)).Value;
+				State.AccessTokens.Add(new Pair<Guid, Guid>(token, profile.Id));
+				return new AuthenticationResponse(token, req.ClientId, req.IncludeUser ? user.User : null, profile);
 			}
 		}
 	}

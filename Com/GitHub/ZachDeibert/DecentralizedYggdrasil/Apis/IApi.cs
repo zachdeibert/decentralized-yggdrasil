@@ -12,7 +12,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 			get;
 		}
 
-		void Init(YggdrasilServer server, List<UserData> users);
+		void Init(YggdrasilServer server, List<UserData> users, TransientStateData state);
 
 		bool IsAcceptable(Uri uri);
 

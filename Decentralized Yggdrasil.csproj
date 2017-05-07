@@ -76,6 +76,7 @@
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\CreateUserCommand.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\CheckPasswordCommand.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\ChangePasswordCommand.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\TransientStateData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
