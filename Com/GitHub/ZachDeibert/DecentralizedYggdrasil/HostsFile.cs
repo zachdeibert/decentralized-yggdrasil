@@ -22,7 +22,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 			File.AppendAllLines(FilePath, new [] {
 				Header,
 				"127.0.0.1\tauthserver.mojang.com",
-				"127.0.0.1\tsessisonserver.mojang.com",
+				"127.0.0.1\tsessionserver.mojang.com",
 				Footer
 			});
 		}
