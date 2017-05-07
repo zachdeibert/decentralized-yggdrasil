@@ -24,7 +24,6 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 		}
 
 		public object Run(object param, Uri uri) {
-			SignOutRequest req = (SignOutRequest) param;
 			return null;
 		}
 	}

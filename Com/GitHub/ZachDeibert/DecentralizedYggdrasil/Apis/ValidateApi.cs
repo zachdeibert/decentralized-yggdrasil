@@ -24,7 +24,6 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 		}
 
 		public object Run(object param, Uri uri) {
-			ValidateRequest req = (ValidateRequest) param;
 			return null;
 		}
 	}

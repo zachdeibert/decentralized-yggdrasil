@@ -6,7 +6,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 	public class JoinApi : IApi {
 		public Type ParamType {
 			get {
-				return typeof(JoinApi);
+				return typeof(JoinServerRequest);
 			}
 		}
 
@@ -24,7 +24,6 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 		}
 
 		public object Run(object param, Uri uri) {
-			JoinApi req = (JoinApi) param;
 			return null;
 		}
 	}
