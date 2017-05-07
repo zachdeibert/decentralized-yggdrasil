@@ -8,18 +8,20 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 
 public class Launcher implements Serializable {
 	public static final Launcher VANILLA = new Launcher("Minecraft",
 			"http://s3.amazonaws.com/Minecraft.Download/launcher/Minecraft.jar");
 	public static final Launcher FTB = new Launcher("FTB", "http://ftb.cursecdn.com/FTB2/launcher/FTB_Launcher.jar");
 	public static final Launcher TECHNIC = new Launcher("Technic",
-			"http://launcher.technicpack.net/launcher4/349/TechnicLauncher.jar");
+			"http://launcher.technicpack.net/launcher4/349/TechnicLauncher.jar", "-blockReboot");
 
 	private static final long serialVersionUID = 1666394930637848062L;
 	public final String name;
 	public final File path;
 	private final URL url;
+	private final String[] args;
 
 	public boolean isInstalled() {
 		return path.exists();
@@ -35,8 +37,11 @@ public class Launcher implements Serializable {
 	}
 
 	public void launch(File keystore) throws IOException {
-		Process proc = Runtime.getRuntime().exec(new String[] { "java",
-				"-Djavax.net.ssl.trustStore=".concat(keystore.getAbsolutePath()), "-jar", path.getAbsolutePath() });
+		String[] cmd = new String[4 + args.length];
+		System.arraycopy(new String[] { "java", "-Djavax.net.ssl.trustStore=".concat(keystore.getAbsolutePath()),
+				"-jar", path.getAbsolutePath() }, 0, cmd, 0, 4);
+		System.arraycopy(args, 0, cmd, 4, args.length);
+		Process proc = Runtime.getRuntime().exec(cmd);
 		Thread stdout = new Thread() {
 			@Override
 			public void run() {
@@ -79,6 +84,7 @@ public class Launcher implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + Arrays.hashCode(args);
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((path == null) ? 0 : path.hashCode());
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
@@ -97,6 +103,9 @@ public class Launcher implements Serializable {
 			return false;
 		}
 		Launcher other = (Launcher) obj;
+		if (!Arrays.equals(args, other.args)) {
+			return false;
+		}
 		if (name == null) {
 			if (other.name != null) {
 				return false;
@@ -130,15 +139,17 @@ public class Launcher implements Serializable {
 		name = null;
 		path = null;
 		url = null;
+		args = new String[0];
 	}
 
 	public Launcher(String name, File path) {
 		this.name = name;
 		this.path = path;
 		url = null;
+		args = new String[0];
 	}
 
-	private Launcher(String name, String url) {
+	private Launcher(String name, String url, String... args) {
 		this.name = name;
 		path = new File(name.concat(".jar"));
 		try {
@@ -146,5 +157,6 @@ public class Launcher implements Serializable {
 		} catch (MalformedURLException ex) {
 			throw new RuntimeException(ex);
 		}
+		this.args = args;
 	}
 }
