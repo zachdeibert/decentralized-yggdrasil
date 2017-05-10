@@ -8,7 +8,10 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class Launcher implements Serializable {
 	public static final Launcher VANILLA = new Launcher("Minecraft",
@@ -37,11 +40,21 @@ public class Launcher implements Serializable {
 	}
 
 	public void launch(File keystore) throws IOException {
-		String[] cmd = new String[4 + args.length];
-		System.arraycopy(new String[] { "java", "-Djavax.net.ssl.trustStore=".concat(keystore.getAbsolutePath()),
-				"-jar", path.getAbsolutePath() }, 0, cmd, 0, 4);
-		System.arraycopy(args, 0, cmd, 4, args.length);
-		Process proc = Runtime.getRuntime().exec(cmd);
+		String[] cmd = new String[3 + args.length];
+		System.arraycopy(new String[] { new File(JavaEnvironment.FAKE_BIN, "java").getAbsolutePath(), "-jar",
+				path.getAbsolutePath() }, 0, cmd, 0, 3);
+		System.arraycopy(args, 0, cmd, 3, args.length);
+		JavaEnvironment.createJavaWrapper(keystore);
+		List<String> envp = new ArrayList<String>();
+		Map<String, String> realEnvp = System.getenv();
+		for (String key : realEnvp.keySet()) {
+			if (!key.equals("PATH")) {
+				envp.add(key.concat("=").concat(realEnvp.get(key)));
+			}
+		}
+		envp.add("PATH=".concat(JavaEnvironment.FAKE_BIN.getAbsolutePath()).concat(File.pathSeparator)
+				.concat(realEnvp.get("PATH")));
+		Process proc = Runtime.getRuntime().exec(cmd, envp.toArray(new String[0]));
 		Thread stdout = new Thread() {
 			@Override
 			public void run() {
