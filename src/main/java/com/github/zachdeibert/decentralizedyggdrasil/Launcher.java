@@ -68,6 +68,21 @@ public class Launcher implements Serializable {
 		envp.add("PATH=".concat(JavaEnvironment.FAKE_BIN.getAbsolutePath()).concat(File.pathSeparator)
 				.concat(System.getenv("PATH")));
 		Process proc = Runtime.getRuntime().exec(cmd, envp.toArray(new String[0]));
+		Thread stdin = new Thread() {
+			@Override
+			public void run() {
+				try (OutputStream out = proc.getOutputStream()) {
+					byte[] buffer = new byte[4096];
+					for (int len = System.in.read(buffer); len > 0; len = System.in.read(buffer)) {
+						out.write(buffer, 0, len);
+						out.flush();
+					}
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+		};
+		stdin.start();
 		Thread stdout = new Thread() {
 			@Override
 			public void run() {
@@ -76,7 +91,6 @@ public class Launcher implements Serializable {
 					for (int len = in.read(buffer); len > 0; len = in.read(buffer)) {
 						System.out.write(buffer, 0, len);
 					}
-
 				} catch (IOException ex) {
 					ex.printStackTrace();
 				}
@@ -99,11 +113,13 @@ public class Launcher implements Serializable {
 		stderr.start();
 		try {
 			proc.waitFor();
+			stdin.interrupt();
 			stdout.join();
 			stderr.join();
 		} catch (InterruptedException ex) {
 			throw new IOException(ex);
 		}
+		System.exit(0);
 	}
 
 	@Override
