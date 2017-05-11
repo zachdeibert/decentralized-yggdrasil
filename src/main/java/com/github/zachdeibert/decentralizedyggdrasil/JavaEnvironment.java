@@ -1,8 +1,10 @@
 package com.github.zachdeibert.decentralizedyggdrasil;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -30,7 +32,7 @@ public class JavaEnvironment {
 	}
 
 	private static String which(String cmd) throws IOException {
-		for (String dir : cmd.split(File.pathSeparator)) {
+		for (String dir : System.getenv("PATH").split(File.pathSeparator)) {
 			File file = new File(dir, cmd);
 			if (file.exists()) {
 				return file.getAbsolutePath();
@@ -50,7 +52,18 @@ public class JavaEnvironment {
 			ex.printStackTrace();
 		}
 		shell.setExecutable(true);
-		File batch = new File(FAKE_BIN, "java");
+		File batchLauncher = new File("batch-launcher.exe");
+		File exe = new File(FAKE_BIN, "java.exe");
+		try (OutputStream out = new FileOutputStream(exe); InputStream in = new FileInputStream(batchLauncher)) {
+			byte[] buffer = new byte[4096];
+			int len;
+			while ((len = in.read(buffer)) > 0) {
+				out.write(buffer, 0, len);
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		File batch = new File(FAKE_BIN, "java.exe.bat");
 		try (OutputStream stream = new FileOutputStream(batch); PrintWriter ps = new PrintWriter(stream)) {
 			ps.println("@echo off");
 			ps.println();

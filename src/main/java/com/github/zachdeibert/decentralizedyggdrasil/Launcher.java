@@ -41,19 +41,20 @@ public class Launcher implements Serializable {
 
 	public void launch(File keystore) throws IOException {
 		String[] cmd = new String[3 + args.length];
-		System.arraycopy(new String[] { new File(JavaEnvironment.FAKE_BIN, "java").getAbsolutePath(), "-jar",
+		String java = System.getProperty("os.name").toLowerCase().contains("win") ? "java.exe" : "java";
+		System.arraycopy(new String[] { new File(JavaEnvironment.FAKE_BIN, java).getAbsolutePath(), "-jar",
 				path.getAbsolutePath() }, 0, cmd, 0, 3);
 		System.arraycopy(args, 0, cmd, 3, args.length);
 		JavaEnvironment.createJavaWrapper(keystore);
 		List<String> envp = new ArrayList<String>();
 		Map<String, String> realEnvp = System.getenv();
 		for (String key : realEnvp.keySet()) {
-			if (!key.equals("PATH")) {
+			if (!key.toUpperCase().equals("PATH")) {
 				envp.add(key.concat("=").concat(realEnvp.get(key)));
 			}
 		}
 		envp.add("PATH=".concat(JavaEnvironment.FAKE_BIN.getAbsolutePath()).concat(File.pathSeparator)
-				.concat(realEnvp.get("PATH")));
+				.concat(System.getenv("PATH")));
 		Process proc = Runtime.getRuntime().exec(cmd, envp.toArray(new String[0]));
 		Thread stdout = new Thread() {
 			@Override

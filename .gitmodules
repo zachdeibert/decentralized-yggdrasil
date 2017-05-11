@@ -1,3 +1,6 @@
 [submodule "ssl-endpoint"]
 	path = ssl-endpoint
 	url = https://github.com/zachdeibert/ssl-endpoint
+[submodule "batch-launcher"]
+	path = batch-launcher
+	url = https://github.com/zachdeibert/batch-launcher.git
