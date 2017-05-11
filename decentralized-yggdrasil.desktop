@@ -1,0 +1,10 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Decentralized Yggdrasil
+Terminal=false
+
+GenericName=Decentralized Yggdrasil
+Comment=A version of the Yggdrasil authentication server that is completely decentralized
+Exec=decentralized-yggdrasil

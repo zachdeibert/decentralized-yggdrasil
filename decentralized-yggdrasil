@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd "$(dirname "$(readlink "$0")")"
+mono decentralized-yggdrasil.exe $*
