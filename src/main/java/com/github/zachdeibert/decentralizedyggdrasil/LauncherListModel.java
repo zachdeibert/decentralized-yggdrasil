@@ -65,6 +65,16 @@ public class LauncherListModel extends AbstractListModel<Launcher> {
 		return launchers.size();
 	}
 
+	public void removeProblems() {
+		List<Launcher> problems = new ArrayList<Launcher>();
+		for (Launcher launcher : launchers) {
+			if (!launcher.path.exists()) {
+				problems.add(launcher);
+			}
+		}
+		launchers.removeAll(problems);
+	}
+
 	public LauncherListModel() {
 		launchers = new ArrayList<Launcher>();
 		prefs = Preferences.userNodeForPackage(getClass());
@@ -75,6 +85,7 @@ public class LauncherListModel extends AbstractListModel<Launcher> {
 				@SuppressWarnings("unchecked")
 				List<Launcher> list = (List<Launcher>) stream.readObject();
 				launchers.addAll(list);
+				removeProblems();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
