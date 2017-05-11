@@ -29,17 +29,34 @@ public class JavaEnvironment {
 		}
 	}
 
+	private static String which(String cmd) throws IOException {
+		for (String dir : cmd.split(File.pathSeparator)) {
+			File file = new File(dir, cmd);
+			if (file.exists()) {
+				return file.getAbsolutePath();
+			}
+		}
+		throw new FileNotFoundException(cmd);
+	}
+
 	public static void createJavaWrapper(File keystore) {
 		FAKE_BIN.mkdirs();
 		File shell = new File(FAKE_BIN, "java");
 		try (OutputStream stream = new FileOutputStream(shell); PrintWriter ps = new PrintWriter(stream)) {
 			ps.println("#!/bin/sh");
 			ps.println();
-			ps.printf("$(PATH=\"%s\" which java) -Djavax.net.ssl.trustStore=%s $*\n", System.getenv("PATH"),
-					keystore.getAbsolutePath());
+			ps.printf("%s -Djavax.net.ssl.trustStore=%s $*\n", which("java"), keystore.getAbsolutePath());
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 		shell.setExecutable(true);
+		File batch = new File(FAKE_BIN, "java");
+		try (OutputStream stream = new FileOutputStream(batch); PrintWriter ps = new PrintWriter(stream)) {
+			ps.println("@echo off");
+			ps.println();
+			ps.printf("%s -Djavax.net.ssl.trustStore=%s %%*\n", which("java.exe"), keystore.getAbsolutePath());
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 }
