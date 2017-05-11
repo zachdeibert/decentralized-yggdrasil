@@ -35,42 +35,46 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 		}
 
 		private void RequestCallback(IAsyncResult iar) {
-			HttpListenerContext ctx = Listener.EndGetContext(iar);
-			if (Listener.IsListening) {
-				Listener.BeginGetContext(RequestCallback, null);
-			}
-			if (ctx != null) {
-				HttpListenerRequest req = ctx.Request;
-				HttpListenerResponse res = ctx.Response;
-				try {
-					object response = null;
-					try {
-						CheckRequest(req);
-						byte[] data = new byte[req.ContentLength64];
-						req.InputStream.Read(data, 0, data.Length);
-						response = Handle(req.Url, req.HttpMethod, Encoding.UTF8.GetString(data));
-					} catch (StandardErrorException ex) {
-						response = ex.Error;
-						res.StatusCode = ex.StatusCode;
-						res.StatusDescription = ex.StatusDescription;
-					} catch (Exception ex) {
-						response = new Error(ex);
-						res.StatusCode = 500;
-						res.StatusDescription = "Internal Server Error";
-					}
-					byte[] raw = response == null ? new byte[0] : Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(response));
-					if (raw.Length == 0) {
-						res.StatusCode = 204;
-						res.StatusDescription = "No Content";
-					}
-					res.ContentLength64 = raw.Length;
-					res.ContentType = "application/json";
-					res.OutputStream.Write(raw, 0, raw.Length);
-				} catch (Exception ex) {
-					Console.Error.WriteLine(ex);
-				} finally {
-					res.OutputStream.Close();
+			try {
+				HttpListenerContext ctx = Listener.EndGetContext(iar);
+				if (Listener.IsListening) {
+					Listener.BeginGetContext(RequestCallback, null);
 				}
+				if (ctx != null) {
+					HttpListenerRequest req = ctx.Request;
+					HttpListenerResponse res = ctx.Response;
+					try {
+						object response = null;
+						try {
+							CheckRequest(req);
+							byte[] data = new byte[req.ContentLength64];
+							req.InputStream.Read(data, 0, data.Length);
+							response = Handle(req.Url, req.HttpMethod, Encoding.UTF8.GetString(data));
+						} catch (StandardErrorException ex) {
+							response = ex.Error;
+							res.StatusCode = ex.StatusCode;
+							res.StatusDescription = ex.StatusDescription;
+						} catch (Exception ex) {
+							response = new Error(ex);
+							res.StatusCode = 500;
+							res.StatusDescription = "Internal Server Error";
+						}
+						byte[] raw = response == null ? new byte[0] : Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(response));
+						if (raw.Length == 0) {
+							res.StatusCode = 204;
+							res.StatusDescription = "No Content";
+						}
+						res.ContentLength64 = raw.Length;
+						res.ContentType = "application/json";
+						res.OutputStream.Write(raw, 0, raw.Length);
+					} catch (Exception ex) {
+						Console.Error.WriteLine(ex);
+					} finally {
+						res.OutputStream.Close();
+					}
+				}
+			} catch (Exception ex) {
+				Console.Error.WriteLine(ex);
 			}
 		}
 
