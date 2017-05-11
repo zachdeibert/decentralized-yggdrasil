@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 public class JavaEnvironment {
 	public static final char[] KEYSTORE_PASS = "changeit".toCharArray();
 	public static final File FAKE_BIN = new File("bin");
+	public static final boolean IS_WINDOWS = System.getProperty("os.name").toLowerCase().contains("win");
 
 	public static File findDefaultKeystore() throws IOException {
 		File home = new File(System.getProperty("java.home"));

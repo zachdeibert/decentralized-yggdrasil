@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -21,6 +20,7 @@ import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class EnvironmentPrompt extends JFrame {
@@ -81,35 +81,12 @@ public class EnvironmentPrompt extends JFrame {
 			}
 		});
 		JPopupMenu popupMenu = new JPopupMenu();
-		ActionListener selectJar = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new JFileChooser();
-				chooser.setFileFilter(new FileNameExtensionFilter("Jar Files", "jar"));
-				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				if (chooser.showOpenDialog(EnvironmentPrompt.this) == JFileChooser.APPROVE_OPTION) {
-					launchers.install(new Launcher(chooser.getSelectedFile().getName(), chooser.getSelectedFile()));
-				}
-			}
-		};
-		MouseListener popup = new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getButton() == MouseEvent.BUTTON1) {
-					popupMenu.show(e.getComponent(), e.getX(), e.getY());
-				}
-			}
-		};
 		JMenuItem mntmVanilla = new JMenuItem("Vanilla");
 		mntmVanilla.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (launchers.install(Launcher.VANILLA)) {
 					popupMenu.remove(mntmVanilla);
-					if (popupMenu.getComponentCount() == 1) {
-						btnAddLauncher.addActionListener(selectJar);
-						btnAddLauncher.removeMouseListener(popup);
-					}
 				} else {
 					JOptionPane.showMessageDialog(EnvironmentPrompt.this, "Unable to install launcher",
 							"Installation Error", JOptionPane.ERROR_MESSAGE);
@@ -125,10 +102,6 @@ public class EnvironmentPrompt extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (launchers.install(Launcher.FTB)) {
 					popupMenu.remove(mntmFtb);
-					if (popupMenu.getComponentCount() == 1) {
-						btnAddLauncher.addActionListener(selectJar);
-						btnAddLauncher.removeMouseListener(popup);
-					}
 				} else {
 					JOptionPane.showMessageDialog(EnvironmentPrompt.this, "Unable to install launcher",
 							"Installation Error", JOptionPane.ERROR_MESSAGE);
@@ -144,10 +117,6 @@ public class EnvironmentPrompt extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (launchers.install(Launcher.TECHNIC)) {
 					popupMenu.remove(mntmTechnic);
-					if (popupMenu.getComponentCount() == 1) {
-						btnAddLauncher.addActionListener(selectJar);
-						btnAddLauncher.removeMouseListener(popup);
-					}
 				} else {
 					JOptionPane.showMessageDialog(EnvironmentPrompt.this, "Unable to install launcher",
 							"Installation Error", JOptionPane.ERROR_MESSAGE);
@@ -158,12 +127,50 @@ public class EnvironmentPrompt extends JFrame {
 			popupMenu.add(mntmTechnic);
 		}
 		JMenuItem mntmSelectJar = new JMenuItem("Select Jar...");
+		mntmSelectJar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setFileFilter(new FileNameExtensionFilter("Jar Files", "jar"));
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				if (chooser.showOpenDialog(EnvironmentPrompt.this) == JFileChooser.APPROVE_OPTION) {
+					launchers.install(new Launcher(chooser.getSelectedFile().getName(), chooser.getSelectedFile()));
+				}
+			}
+		});
 		popupMenu.add(mntmSelectJar);
-		if (popupMenu.getComponentCount() > 0) {
-			btnAddLauncher.addMouseListener(popup);
-		} else {
-			btnAddLauncher.addActionListener(selectJar);
-		}
+		JMenuItem mntmSelectScript = new JMenuItem("Select Script...");
+		mntmSelectScript.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setFileFilter(JavaEnvironment.IS_WINDOWS ? new FileNameExtensionFilter("Batch Scripts", "bat")
+						: new FileFilter() {
+							@Override
+							public String getDescription() {
+								return "Shell Scripts";
+							}
+
+							@Override
+							public boolean accept(File f) {
+								return f.canExecute();
+							}
+						});
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				if (chooser.showOpenDialog(EnvironmentPrompt.this) == JFileChooser.APPROVE_OPTION) {
+					launchers.install(new Launcher(chooser.getSelectedFile().getName(), chooser.getSelectedFile()));
+				}
+			}
+		});
+		popupMenu.add(mntmSelectScript);
+		btnAddLauncher.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1) {
+					popupMenu.show(e.getComponent(), e.getX(), e.getY());
+				}
+			}
+		});
 		btnDelete.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -177,10 +184,6 @@ public class EnvironmentPrompt extends JFrame {
 					popupMenu.add(mntmTechnic);
 				} else {
 					return;
-				}
-				if (popupMenu.getComponentCount() == 2) {
-					btnAddLauncher.removeActionListener(selectJar);
-					btnAddLauncher.addMouseListener(popup);
 				}
 			}
 		});

@@ -40,11 +40,23 @@ public class Launcher implements Serializable {
 	}
 
 	public void launch(File keystore) throws IOException {
-		String[] cmd = new String[3 + args.length];
-		String java = System.getProperty("os.name").toLowerCase().contains("win") ? "java.exe" : "java";
-		System.arraycopy(new String[] { new File(JavaEnvironment.FAKE_BIN, java).getAbsolutePath(), "-jar",
-				path.getAbsolutePath() }, 0, cmd, 0, 3);
-		System.arraycopy(args, 0, cmd, 3, args.length);
+		String[] cmd;
+		if (path.getName().endsWith(".jar")) {
+			cmd = new String[3 + args.length];
+			System.arraycopy(
+					new String[] { new File(JavaEnvironment.FAKE_BIN, JavaEnvironment.IS_WINDOWS ? "java.exe" : "java")
+							.getAbsolutePath(), "-jar", path.getAbsolutePath() },
+					0, cmd, 0, 3);
+			System.arraycopy(args, 0, cmd, 3, args.length);
+		} else if (JavaEnvironment.IS_WINDOWS) {
+			cmd = new String[3 + args.length];
+			System.arraycopy(new String[] { "cmd", "/C", path.getAbsolutePath() }, 0, cmd, 0, 3);
+			System.arraycopy(args, 0, cmd, 3, args.length);
+		} else {
+			cmd = new String[1 + args.length];
+			cmd[0] = path.getAbsolutePath();
+			System.arraycopy(args, 0, cmd, 1, args.length);
+		}
 		JavaEnvironment.createJavaWrapper(keystore);
 		List<String> envp = new ArrayList<String>();
 		Map<String, String> realEnvp = System.getenv();
