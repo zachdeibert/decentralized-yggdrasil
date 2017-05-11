@@ -9,6 +9,9 @@ using System.Threading;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 	public class DefaultCommand : ICommand {
+		private const int RetryTimeout = 250;
+		private const int MaxServerStartTime = 60000;
+
 		public string Name {
 			get {
 				return null;
@@ -35,8 +38,19 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 					break;
 				}
 				Process.Start(info);
-				Thread.Sleep(5000);
-				WebRequest.Create("http://localhost:56195/cghzddy/lock").GetResponse().Close();
+				int slept = 0;
+				while (true) {
+					Thread.Sleep(RetryTimeout);
+					slept += RetryTimeout;
+					try {
+						WebRequest.Create("http://localhost:56195/cghzddy/lock").GetResponse().Close();
+						break;
+					} catch (Exception ex) {
+						if (slept >= MaxServerStartTime) {
+							throw ex;
+						}
+					}
+				}
 			}
 			X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
 			store.Open(OpenFlags.ReadOnly);
