@@ -114,5 +114,9 @@
       <Project>{2DFEB98E-9BA9-48A8-84EF-0C2C58365A60}</Project>
       <Name>ssl-endpoint</Name>
     </ProjectReference>
+    <ProjectReference Include="batch-launcher\batch-launcher.csproj">
+      <Project>{76A8AD92-1B2D-43A1-A97C-2FCC5BD07402}</Project>
+      <Name>batch-launcher</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

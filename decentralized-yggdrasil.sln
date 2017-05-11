@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decentralized Yggdrasil", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ssl-endpoint", "ssl-endpoint\ssl-endpoint.csproj", "{2DFEB98E-9BA9-48A8-84EF-0C2C58365A60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "batch-launcher", "batch-launcher\batch-launcher.csproj", "{76A8AD92-1B2D-43A1-A97C-2FCC5BD07402}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,6 +17,10 @@ Global
 		{2DFEB98E-9BA9-48A8-84EF-0C2C58365A60}.Debug|x86.Build.0 = Debug|x86
 		{2DFEB98E-9BA9-48A8-84EF-0C2C58365A60}.Release|x86.ActiveCfg = Release|x86
 		{2DFEB98E-9BA9-48A8-84EF-0C2C58365A60}.Release|x86.Build.0 = Release|x86
+		{76A8AD92-1B2D-43A1-A97C-2FCC5BD07402}.Debug|x86.ActiveCfg = Debug|x86
+		{76A8AD92-1B2D-43A1-A97C-2FCC5BD07402}.Debug|x86.Build.0 = Debug|x86
+		{76A8AD92-1B2D-43A1-A97C-2FCC5BD07402}.Release|x86.ActiveCfg = Release|x86
+		{76A8AD92-1B2D-43A1-A97C-2FCC5BD07402}.Release|x86.Build.0 = Release|x86
 		{F83A6580-BFC9-44B4-BC92-8D6C0BF0ED46}.Debug|x86.ActiveCfg = Debug|x86
 		{F83A6580-BFC9-44B4-BC92-8D6C0BF0ED46}.Debug|x86.Build.0 = Debug|x86
 		{F83A6580-BFC9-44B4-BC92-8D6C0BF0ED46}.Release|x86.ActiveCfg = Release|x86
