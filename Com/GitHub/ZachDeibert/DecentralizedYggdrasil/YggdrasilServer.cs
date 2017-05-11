@@ -75,6 +75,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 				}
 			} catch (Exception ex) {
 				Console.Error.WriteLine(ex);
+				Stop();
 			}
 		}
 
