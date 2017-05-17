@@ -8,6 +8,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 	public class LoginApi : IApi {
 		private List<UserData> Users;
 		private TransientStateData State;
+		private RealYggdrasil Yggdrasil;
 
 		public Type ParamType {
 			get {
@@ -21,9 +22,10 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 			}
 		}
 
-		public void Init(YggdrasilServer server, List<UserData> users, TransientStateData state) {
+		public void Init(YggdrasilServer server, List<UserData> users, TransientStateData state, RealYggdrasil yggdrasil) {
 			Users = users;
 			State = state;
+			Yggdrasil = yggdrasil;
 		}
 
 		public bool IsAcceptable(Uri uri) {
@@ -44,6 +46,14 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 				TransientProfileData data = State[profile];
 				data.AccessToken = token;
 				data.PrivateKey = new DecryptedPrivateKey(token, key);
+				if (user.TryProxy) {
+					Guid clientId = req.ClientId;
+					req.ClientId = State.ProxyingClientId;
+					req.IncludeUser = false;
+					AuthenticationResponse res = Yggdrasil.Request<AuthenticationResponse>("https://authserver.mojang.com/authenticate", req);
+					req.ClientId = clientId;
+					data.ProxiedAccessToken = res.AccessToken;
+				}
 				return new AuthenticationResponse(token, req.ClientId, req.IncludeUser ? user.User : null, profile);
 			}
 		}

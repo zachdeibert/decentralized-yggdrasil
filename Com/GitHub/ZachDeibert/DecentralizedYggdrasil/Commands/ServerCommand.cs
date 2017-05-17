@@ -11,8 +11,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 		}
 
 		public void Run(string[] args) {
+			RealYggdrasil yggdrasil = new RealYggdrasil();
 			HostsFile hosts = new HostsFile();
-			YggdrasilServer server = new YggdrasilServer(56195);
+			YggdrasilServer server = new YggdrasilServer(56195, yggdrasil);
 			server.Start();
 			Process ssl;
 			if (Type.GetType("Mono.Runtime") == null) {

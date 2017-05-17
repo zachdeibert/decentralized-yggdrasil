@@ -20,7 +20,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 			}
 		}
 
-		public void Init(YggdrasilServer server, List<UserData> users, TransientStateData state) {
+		public void Init(YggdrasilServer server, List<UserData> users, TransientStateData state, RealYggdrasil yggdrasil) {
 			State = state;
 		}
 

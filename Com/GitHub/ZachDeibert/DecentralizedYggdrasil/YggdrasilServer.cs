@@ -13,6 +13,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 		private HttpListener Listener;
 		private List<IApi> Apis;
 		private TransientStateData State;
+		private RealYggdrasil Yggdrasil;
 		public int NumClients;
 		public event Action OnStop;
 
@@ -87,7 +88,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 				if (typeof(IApi).IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface) {
 					IApi api = (IApi) t.GetConstructor(new Type[0]).Invoke(new object[0]);
 					Apis.Add(api);
-					api.Init(this, users, State);
+					api.Init(this, users, State, Yggdrasil);
 				}
 			}
 			Listener.Start();
@@ -102,9 +103,10 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 			}
 		}
 
-		public YggdrasilServer(int port) {
+		public YggdrasilServer(int port, RealYggdrasil yggdrasil) {
 			Listener = new HttpListener();
 			Listener.Prefixes.Add(string.Format("http://+:{0}/", port));
+			Yggdrasil = yggdrasil;
 		}
 	}
 }
