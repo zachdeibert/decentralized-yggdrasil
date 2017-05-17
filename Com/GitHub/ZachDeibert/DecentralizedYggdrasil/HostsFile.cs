@@ -7,6 +7,10 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 	public class HostsFile {
 		private const string Header = "#-----START YGGDRASIL HOSTS (CGHZDDY)-----#";
 		private const string Footer = "#----- END YGGDRASIL HOSTS (CGHZDDY) -----#";
+		public static readonly string[] Hosts = new [] {
+			"authserver.mojang.com",
+			"sessionserver.mojang.com"
+		};
 		public readonly string FilePath;
 
 		public bool IsOverriden {
@@ -19,12 +23,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 		}
 
 		public void Override() {
-			File.AppendAllLines(FilePath, new [] {
-				Header,
-				"127.0.0.1\tauthserver.mojang.com",
-				"127.0.0.1\tsessionserver.mojang.com",
-				Footer
-			});
+			File.AppendAllLines(FilePath, Enumerable.Repeat(Header, 1).Concat(Hosts.Select(h => string.Concat("127.0.0.1\t", h))).Concat(Enumerable.Repeat(Footer, 1)));
 		}
 
 		public void Reset() {
