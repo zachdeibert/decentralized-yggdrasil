@@ -6,6 +6,7 @@ using Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model;
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 	public class InvalidateApi : IApi {
 		private TransientStateData State;
+		private RealYggdrasil Yggdrasil;
 
 		public Type ParamType {
 			get {
@@ -21,6 +22,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 
 		public void Init(YggdrasilServer server, List<UserData> users, TransientStateData state, RealYggdrasil yggdrasil) {
 			State = state;
+			Yggdrasil = yggdrasil;
 		}
 
 		public bool IsAcceptable(Uri uri) {
@@ -29,7 +31,15 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 
 		public object Run(object param, Uri uri) {
 			InvalidateRequest req = (InvalidateRequest) param;
-			State.Profiles.Where(p => p.AccessToken == req.AccessToken).ToList().ForEach(p => p.AccessToken = Guid.Empty);
+			State.Profiles.Where(p => p.AccessToken == req.AccessToken).ToList().ForEach(p => {
+				if (p.ProxiedAccessToken != Guid.Empty) {
+					Yggdrasil.Request<object>("https://authserver.mojang.com/invalidate", new InvalidateRequest() {
+						AccessToken = p.ProxiedAccessToken,
+						ClientId = State.ProxyingClientId
+					});
+				}
+				p.AccessToken = Guid.Empty;
+			});
 			return null;
 		}
 	}
