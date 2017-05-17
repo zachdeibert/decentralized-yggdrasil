@@ -32,7 +32,6 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 					user.TryProxy = true;
 					users.Add(user);
 					UserDataList.Save(users);
-					state[res.Profile].ProxiedAccessToken = res.AccessToken;
 				}
 				TransientStateData.Save(state);
 			} else {
