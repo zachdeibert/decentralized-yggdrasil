@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Security;
 using Newtonsoft.Json;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
@@ -13,6 +14,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 			if (RealIPs.ContainsKey(host)) {
 				return RealIPs[host];
 			} else {
+				Console.Error.WriteLine("Forgot to resolve {0} before overriding it.", host);
 				return Dns.GetHostAddresses(host).Select(i => i.ToString());
 			}
 		}
@@ -37,21 +39,28 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 			if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps) {
 				throw new UriFormatException("Invalid URI scheme");
 			}
-			Exception ex = new WebException("Unknown host");
+			Exception e = new WebException("Unknown host");
 			foreach (string host in Resolve(uri.Host)) {
 				UriBuilder proxyUri = new UriBuilder(uri);
 				proxyUri.Host = host;
 				HttpWebRequest req = WebRequest.CreateHttp(proxyUri.Uri);
+				req.Host = uri.Host;
 				if (requestBuilder != null) {
 					requestBuilder(req);
 				}
 				try {
 					return (HttpWebResponse) req.GetResponse();
-				} catch (Exception e) {
-					ex = e;
+				} catch (WebException ex) {
+					if (ex.Response == null) {
+						throw;
+					} else {
+						return (HttpWebResponse) ex.Response;
+					}
+				} catch (Exception ex) {
+					e = ex;
 				}
 			}
-			throw ex;
+			throw e;
 		}
 
 		public T Request<T>(string uriString, object request, out HttpStatusCode status) {
@@ -67,18 +76,20 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 				}
 			})) {
 				status = res.StatusCode;
-				using (Stream stream = res.GetResponseStream()) {
-					using (TextReader reader = new StreamReader(stream)) {
-						try {
-							string json = reader.ReadToEnd();
-							if (json != null) {
-								return JsonConvert.DeserializeObject<T>(json);
+				if (status >= HttpStatusCode.OK && status < HttpStatusCode.MultipleChoices) {
+					using (Stream stream = res.GetResponseStream()) {
+						using (TextReader reader = new StreamReader(stream)) {
+							try {
+								string json = reader.ReadToEnd();
+								if (json != null && json.Length > 0) {
+									return JsonConvert.DeserializeObject<T>(json);
+								}
+							} catch {
 							}
-						} catch {
 						}
-						return default(T);
 					}
 				}
+				return default(T);
 			}
 		}
 
