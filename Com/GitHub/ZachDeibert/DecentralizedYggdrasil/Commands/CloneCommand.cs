@@ -23,6 +23,10 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 				if (res == null) {
 					Console.Error.WriteLine("Invalid credentials");
 				} else {
+					yggdrasil.Request<object>("https://authserver.mojang.com/invalidate", new InvalidateRequest() {
+						AccessToken = res.AccessToken,
+						ClientId = state.ProxyingClientId
+					});
 					UserDataList users = UserDataList.Load();
 					UserData user = new UserData();
 					user.Email = args[0];
