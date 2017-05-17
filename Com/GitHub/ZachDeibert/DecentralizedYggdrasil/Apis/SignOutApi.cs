@@ -7,6 +7,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 	public class SignOutApi : IApi {
 		private List<UserData> Users;
 		private TransientStateData State;
+		private RealYggdrasil Yggdrasil;
 
 		public Type ParamType {
 			get {
@@ -23,6 +24,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 		public void Init(YggdrasilServer server, List<UserData> users, TransientStateData state, RealYggdrasil yggdrasil) {
 			Users = users;
 			State = state;
+			Yggdrasil = yggdrasil;
 		}
 
 		public bool IsAcceptable(Uri uri) {
@@ -38,6 +40,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 				throw new StandardErrorException(StandardErrors.InvalidCredentials, 403, "Forbidden");
 			} else {
 				State.Profiles.Where(p => user.Profiles.Any(p2 => p.ProfileId == p2.Id)).ToList().ForEach(p => p.AccessToken = Guid.Empty);
+				if (user.TryProxy) {
+					Yggdrasil.Request<object>("https://authserver.mojang.com/signout", req);
+				}
 			}
 			return null;
 		}
