@@ -24,6 +24,8 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 		public string EncryptedPassword;
 		[XmlElement("private")]
 		public string EncryptedPrivateKey;
+		[XmlElement("real")]
+		public bool TryProxy;
 		[XmlAnyElement("RSAKeyValue")]
 		public XmlNode PublicKey;
 
@@ -140,6 +142,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 		public UserData() {
 			Profiles = new List<Profile>();
 			DefaultProfiles = new List<Pair<Agent, Profile>>();
+			TryProxy = false;
 		}
 	}
 }

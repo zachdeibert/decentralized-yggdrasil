@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
@@ -28,7 +29,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 
 		public object Run(object param, Uri uri) {
 			InvalidateRequest req = (InvalidateRequest) param;
-			State.AccessTokens.RemoveAll(p => p.Key == req.AccessToken);
+			State.Profiles.Where(p => p.AccessToken == req.AccessToken).ToList().ForEach(p => p.AccessToken = Guid.Empty);
 			return null;
 		}
 	}

@@ -31,15 +31,14 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 
 		public object Run(object param, Uri uri) {
 			RefreshRequest req = (RefreshRequest) param;
-			Guid profileId = State.AccessTokens.Where(p => p.Key == req.AccessToken).Select(p => p.Value).FirstOrDefault();
-			if (profileId == default(Guid)) {
+			TransientProfileData data = State.Profiles.FirstOrDefault(p => p.AccessToken == req.AccessToken);
+			if (data == null) {
 				throw new StandardErrorException(StandardErrors.InvalidToken, 403, "Forbidden");
 			} else {
-				State.AccessTokens.Remove(new Pair<Guid, Guid>(req.AccessToken, profileId));
 				Guid newToken = Guid.NewGuid();
-				State.AccessTokens.Add(new Pair<Guid, Guid>(newToken, profileId));
-				UserData user = Users.First(u => u.Profiles.Any(p => p.Id == profileId));
-				Profile profile = user.Profiles.First(p => p.Id == profileId);
+				data.AccessToken = newToken;
+				UserData user = Users.First(u => u.Profiles.Any(p => p.Id == data.ProfileId));
+				Profile profile = user.Profiles.First(p => p.Id == data.ProfileId);
 				return new AuthenticationResponse(newToken, req.ClientId, req.IncludeUser ? user.User : null, profile);
 			}
 		}

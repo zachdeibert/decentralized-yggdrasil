@@ -37,7 +37,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 			} else if (user.GetPrivateKey(req.Password) == null) {
 				throw new StandardErrorException(StandardErrors.InvalidCredentials, 403, "Forbidden");
 			} else {
-				State.AccessTokens.RemoveAll(p => user.Profiles.Any(p2 => p.Key == p2.Id));
+				State.Profiles.Where(p => user.Profiles.Any(p2 => p.ProfileId == p2.Id)).ToList().ForEach(p => p.AccessToken = Guid.Empty);
 			}
 			return null;
 		}

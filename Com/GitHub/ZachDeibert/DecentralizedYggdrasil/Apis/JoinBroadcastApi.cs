@@ -30,9 +30,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 		}
 
 		public static void OnJoined(JoinedServer record, TransientStateData state) {
-			if (!state.JoinedServers.Contains(record)) {
-				state.JoinedServers.RemoveAll(s => s.ProfileId == record.ProfileId);
-				state.JoinedServers.Add(record);
+			TransientProfileData data = state[record.ProfileId];
+			if (data.JoinedServerHash != record.EncryptedHash) {
+				data.JoinedServerHash = record.EncryptedHash;
 				foreach (string server in state.UpstreamServers) {
 					Task.Run(() => {
 						try {

@@ -41,8 +41,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 			} else {
 				Guid token = Guid.NewGuid();
 				Profile profile = (user.DefaultProfiles.FirstOrDefault(p => p.Key.Name == req.Agent.Name) ?? new Pair<Agent, Profile>(null, null)).Value;
-				State.AccessTokens.Add(new Pair<Guid, Guid>(token, profile.Id));
-				State.Keys.Add(new DecryptedPrivateKey(token, key));
+				TransientProfileData data = State[profile];
+				data.AccessToken = token;
+				data.PrivateKey = new DecryptedPrivateKey(token, key);
 				return new AuthenticationResponse(token, req.ClientId, req.IncludeUser ? user.User : null, profile);
 			}
 		}

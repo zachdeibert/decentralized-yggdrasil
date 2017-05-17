@@ -1,20 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 	[XmlRoot("data")]
 	public class TransientStateData {
 		private const string FileName = "transient.xml";
-		[XmlArray("accessTokens")]
-		public List<Pair<Guid, Guid>> AccessTokens;
-		[XmlArray("privateKeys")]
-		public List<DecryptedPrivateKey> Keys;
+		[XmlArray("profiles")]
+		public List<TransientProfileData> Profiles;
 		[XmlArray("upstream")]
 		public List<string> UpstreamServers;
-		[XmlArray("joined")]
-		public List<JoinedServer> JoinedServers;
+		[XmlElement("clientId")]
+		public Guid ProxyingClientId;
+
+		public TransientProfileData this[Guid profileId] {
+			get {
+				TransientProfileData profile = Profiles.FirstOrDefault(p => p.ProfileId == profileId);
+				if (profile == null) {
+					profile = new TransientProfileData(profileId);
+					Profiles.Add(profile);
+				}
+				return profile;
+			}
+		}
+
+		public TransientProfileData this[Profile profile] {
+			get {
+				return this[profile.Id];
+			}
+		}
 
 		public static TransientStateData Load() {
 			if (File.Exists(FileName)) {
@@ -35,10 +51,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 		}
 
 		public TransientStateData() {
-			AccessTokens = new List<Pair<Guid, Guid>>();
-			Keys = new List<DecryptedPrivateKey>();
+			Profiles = new List<TransientProfileData>();
 			UpstreamServers = new List<string>();
-			JoinedServers = new List<JoinedServer>();
+			ProxyingClientId = Guid.NewGuid();
 		}
 	}
 }

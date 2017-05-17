@@ -29,7 +29,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 
 		public object Run(object param, Uri uri) {
 			ValidateRequest req = (ValidateRequest) param;
-			if (!State.AccessTokens.Any(p => p.Key == req.AccessToken)) {
+			if (req.AccessToken == Guid.Empty || !State.Profiles.Any(p => p.AccessToken == req.AccessToken)) {
 				throw new StandardErrorException(StandardErrors.InvalidToken, 403, "Forbidden");
 			}
 			return null;

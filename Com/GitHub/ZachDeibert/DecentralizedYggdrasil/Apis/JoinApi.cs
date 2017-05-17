@@ -30,15 +30,13 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 
 		public object Run(object param, Uri uri) {
 			JoinServerRequest req = (JoinServerRequest) param;
-			Guid profileId = State.AccessTokens.Where(p => p.Key == req.AccessToken).Select(p => p.Value).FirstOrDefault();
-			if (profileId == default(Guid)) {
+			TransientProfileData data = State[req.ProfileId];
+			if (data.AccessToken != req.AccessToken) {
 				throw new StandardErrorException(StandardErrors.InvalidToken, 403, "Forbidden");
-			} else if (profileId == req.ProfileId) {
-				RSACryptoServiceProvider rsa = State.Keys.First(k => k.Id == req.AccessToken).Key;
+			} else {
+				RSACryptoServiceProvider rsa = data.PrivateKey.Key;
 				JoinedServer server = new JoinedServer(req.ProfileId, Convert.ToBase64String(rsa.SignHash(req.ServerHash.SHA1HexToBytes(), CryptoConfig.MapNameToOID("SHA1"))));
 				JoinBroadcastApi.OnJoined(server, State);
-			} else {
-				throw new StandardErrorException(StandardErrors.InvalidToken, 403, "Forbidden");
 			}
 			return null;
 		}

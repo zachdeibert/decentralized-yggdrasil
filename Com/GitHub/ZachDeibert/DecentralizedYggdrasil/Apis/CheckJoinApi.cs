@@ -39,18 +39,16 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 			}
 			IEnumerable<Profile> matchedProfiles = Users.SelectMany(u => u.Profiles).Where(p => p.Name == username);
 			foreach (Profile profile in matchedProfiles) {
-				JoinedServer server = State.JoinedServers.FirstOrDefault(s => s.ProfileId == profile.Id);
-				if (server != null) {
-					UserData user = Users.FirstOrDefault(u => u.Profiles.Any(p => p.Id == profile.Id));
-					if (user == null) {
-						throw new StandardErrorException(StandardErrors.InvalidToken, 403, "Forbidden");
+				TransientProfileData data = State[profile];
+				UserData user = Users.FirstOrDefault(u => u.Profiles.Any(p => p.Id == profile.Id));
+				if (user == null) {
+					throw new StandardErrorException(StandardErrors.InvalidToken, 403, "Forbidden");
+				} else {
+					RSACryptoServiceProvider rsa = user.RSAPublicKey;
+					if (rsa.VerifyHash(serverHash.SHA1HexToBytes(), CryptoConfig.MapNameToOID("SHA1"), Convert.FromBase64String(data.JoinedServerHash))) {
+						return profile;
 					} else {
-						RSACryptoServiceProvider rsa = user.RSAPublicKey;
-						if (rsa.VerifyHash(serverHash.SHA1HexToBytes(), CryptoConfig.MapNameToOID("SHA1"), Convert.FromBase64String(server.EncryptedHash))) {
-							return profile;
-						} else {
-							throw new StandardErrorException(StandardErrors.InvalidToken, 403, "Forbidden");
-						}
+						throw new StandardErrorException(StandardErrors.InvalidToken, 403, "Forbidden");
 					}
 				}
 			}
