@@ -37,6 +37,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 						AccessToken = p.ProxiedAccessToken,
 						ClientId = State.ProxyingClientId
 					});
+					p.ProxiedAccessToken = Guid.Empty;
 				}
 				p.AccessToken = Guid.Empty;
 			});
