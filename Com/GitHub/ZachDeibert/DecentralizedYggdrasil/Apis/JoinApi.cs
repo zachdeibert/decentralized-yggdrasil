@@ -7,6 +7,7 @@ using Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model;
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 	public class JoinApi : IApi {
 		private TransientStateData State;
+		private RealYggdrasil Yggdrasil;
 
 		public Type ParamType {
 			get {
@@ -22,6 +23,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 
 		public void Init(YggdrasilServer server, List<UserData> users, TransientStateData state, RealYggdrasil yggdrasil) {
 			State = state;
+			Yggdrasil = yggdrasil;
 		}
 
 		public bool IsAcceptable(Uri uri) {
@@ -37,6 +39,10 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 				RSACryptoServiceProvider rsa = data.PrivateKey.Key;
 				JoinedServer server = new JoinedServer(req.ProfileId, Convert.ToBase64String(rsa.SignHash(req.ServerHash.SHA1HexToBytes(), CryptoConfig.MapNameToOID("SHA1"))));
 				JoinBroadcastApi.OnJoined(server, State);
+				if (data.ProxiedAccessToken != Guid.Empty) {
+					req.AccessToken = data.ProxiedAccessToken;
+					Yggdrasil.Request<object>("https://sessionserver.mojang.com/session/minecraft/join", req);
+				}
 			}
 			return null;
 		}
