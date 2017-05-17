@@ -48,10 +48,12 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 				data.PrivateKey = new DecryptedPrivateKey(token, key);
 				if (user.TryProxy) {
 					Guid clientId = req.ClientId;
+					bool findUser = req.IncludeUser;
 					req.ClientId = State.ProxyingClientId;
 					req.IncludeUser = false;
 					AuthenticationResponse res = Yggdrasil.Request<AuthenticationResponse>("https://authserver.mojang.com/authenticate", req);
 					req.ClientId = clientId;
+					req.IncludeUser = findUser;
 					data.ProxiedAccessToken = res.AccessToken;
 				}
 				return new AuthenticationResponse(token, req.ClientId, req.IncludeUser ? user.User : null, profile);
