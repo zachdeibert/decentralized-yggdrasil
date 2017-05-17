@@ -88,6 +88,8 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 							}
 						}
 					}
+				} else {
+					Console.Error.WriteLine("Request failed with code {0} for {1}", status, uriString);
 				}
 				return default(T);
 			}
