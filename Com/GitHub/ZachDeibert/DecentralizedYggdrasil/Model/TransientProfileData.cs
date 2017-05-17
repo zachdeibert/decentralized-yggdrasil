@@ -12,6 +12,8 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 		public string JoinedServerHash;
 		[XmlElement("decryptedKey")]
 		public DecryptedPrivateKey PrivateKey;
+		[XmlElement("proxyToken")]
+		public Guid ProxiedAccessToken;
 
 		public TransientProfileData() {
 		}
