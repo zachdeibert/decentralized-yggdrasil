@@ -86,6 +86,8 @@
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\TransientProfileData.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\CloneCommand.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\DashlessGuidConverter.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\Textures.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\Texture.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
