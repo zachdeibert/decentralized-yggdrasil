@@ -46,7 +46,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis {
 				UserData user = Users.First(u => u.Profiles.Any(p => p.Id == profile.Id));
 				RSACryptoServiceProvider rsa = user.RSAPublicKey;
 				if (rsa.VerifyHash(serverHash.SHA1HexToBytes(), CryptoConfig.MapNameToOID("SHA1"), Convert.FromBase64String(data.JoinedServerHash))) {
-					return profile;
+					return new TexturedProfile(profile, data.GetTexture(Yggdrasil));
 				} else if (user.TryProxy) {
 					HttpStatusCode status;
 					Profile real = Yggdrasil.Request<Profile>(string.Concat("https://sessionserver.mojang.com/session/minecraft/hasJoined?username=", username, "&serverId=", serverHash), null, out status);
