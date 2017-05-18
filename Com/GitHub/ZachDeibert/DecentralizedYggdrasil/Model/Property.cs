@@ -9,6 +9,8 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model {
 		public string Key;
 		[JsonProperty("value"), XmlElement("value")]
 		public string Value;
+		[JsonProperty("signature"), XmlElement("signature")]
+		public string Signature;
 
 		public Property() {
 		}
