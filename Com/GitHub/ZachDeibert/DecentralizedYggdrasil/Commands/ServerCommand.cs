@@ -25,12 +25,12 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 			if (!hosts.IsOverriden) {
 				hosts.Override();
 			}
-			AppDomain.CurrentDomain.ProcessExit += (sender, e) => hosts.Reset();
 			server.OnStop += () => {
 				ssl.Kill();
 				thread.Interrupt();
 				hosts.Reset();
 			};
+			AppDomain.CurrentDomain.ProcessExit += (sender, e) => server.Stop();
 			try {
 				while (true) {
 					Thread.Sleep(int.MaxValue);

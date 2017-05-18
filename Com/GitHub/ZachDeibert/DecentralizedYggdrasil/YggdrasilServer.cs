@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using Newtonsoft.Json;
 using Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Apis;
 using Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Model;
@@ -14,6 +15,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 		private List<IApi> Apis;
 		private TransientStateData State;
 		private RealYggdrasil Yggdrasil;
+		private bool Stopped;
 		public int NumClients;
 		public event Action OnStop;
 
@@ -68,11 +70,21 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 						res.ContentLength64 = raw.Length;
 						res.ContentType = "application/json";
 						res.OutputStream.Write(raw, 0, raw.Length);
+					} catch (ThreadAbortException) {
+						throw;
+					} catch (ObjectDisposedException) {
+						throw;
 					} catch (Exception ex) {
 						Console.Error.WriteLine(ex);
 					} finally {
 						res.OutputStream.Close();
 					}
+				}
+			} catch (ThreadAbortException) {
+			} catch (ObjectDisposedException ex) {
+				if (!Stopped) {
+					Console.Error.WriteLine(ex);
+					Stop();
 				}
 			} catch (Exception ex) {
 				Console.Error.WriteLine(ex);
@@ -93,13 +105,21 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 			}
 			Listener.Start();
 			Listener.BeginGetContext(RequestCallback, null);
+			Stopped = false;
 		}
 
 		public void Stop() {
-			Listener.Stop();
-			TransientStateData.Save(State);
-			if (OnStop != null) {
-				OnStop();
+			try {
+				// Prevent thread abortion
+			} finally {
+				if (!Stopped) {
+					Stopped = true;
+					Listener.Stop();
+					TransientStateData.Save(State);
+					if (OnStop != null) {
+						OnStop();
+					}
+				}
 			}
 		}
 
