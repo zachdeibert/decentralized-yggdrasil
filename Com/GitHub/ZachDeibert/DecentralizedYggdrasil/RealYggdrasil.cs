@@ -35,6 +35,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 		}
 
 		public HttpWebResponse Connect(string uriString, Action<HttpWebRequest> requestBuilder = null) {
+#if DEBUG
+				Console.WriteLine("Calling real API at {0}", uriString);
+#endif
 			Uri uri = new Uri(uriString);
 			if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps) {
 				throw new UriFormatException("Invalid URI scheme");
@@ -70,7 +73,11 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 					req.ContentType = "application/json";
 					using (Stream stream = req.GetRequestStream()) {
 						using (TextWriter writer = new StreamWriter(stream)) {
-							writer.Write(JsonConvert.SerializeObject(request));
+							string json = JsonConvert.SerializeObject(request);
+#if DEBUG
+							Console.WriteLine(json);
+#endif	
+							writer.Write(json);
 						}
 					}
 				}
@@ -81,6 +88,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 						using (TextReader reader = new StreamReader(stream)) {
 							try {
 								string json = reader.ReadToEnd();
+#if DEBUG
+								Console.WriteLine(json);
+#endif
 								if (json != null && json.Length > 0) {
 									return JsonConvert.DeserializeObject<T>(json);
 								}
