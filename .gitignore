@@ -342,3 +342,6 @@ local.properties
 .project
 .classpath
 *.jks
+
+# Installers
+*.exe
