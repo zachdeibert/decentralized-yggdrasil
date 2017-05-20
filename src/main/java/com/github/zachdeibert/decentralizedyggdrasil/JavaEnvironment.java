@@ -4,11 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.URISyntaxException;
 
 public class JavaEnvironment {
 	public static final char[] KEYSTORE_PASS = "changeit".toCharArray();
@@ -54,15 +53,7 @@ public class JavaEnvironment {
 			ex.printStackTrace();
 		}
 		shell.setExecutable(true);
-		File batchLauncher;
-		try {
-			batchLauncher = new File(new File(
-					JavaEnvironment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath())
-							.getParentFile(),
-					"batch-launcher.exe");
-		} catch (URISyntaxException ex) {
-			throw new RuntimeException(ex);
-		}
+		File batchLauncher = new File("batch-launcher.exe");
 		File exe = new File(FAKE_BIN, "java.exe");
 		try (OutputStream out = new FileOutputStream(exe); InputStream in = new FileInputStream(batchLauncher)) {
 			byte[] buffer = new byte[4096];
