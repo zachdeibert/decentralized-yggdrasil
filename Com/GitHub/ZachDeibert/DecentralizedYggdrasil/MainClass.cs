@@ -7,8 +7,9 @@ using Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands;
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 	class MainClass {
 		public static void Main(string[] args) {
-			UriBuilder uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
-			Environment.CurrentDirectory = Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path));
+			string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "zachdeibert", "decentralized-yggdrasil");
+			Directory.CreateDirectory(dir);
+			Environment.CurrentDirectory = dir;
 			string cmd = args.Length >= 1 ? args[0] : null;
 			string[] cmdArgs = args.Skip(1).ToArray();
 			foreach (Type t in Assembly.GetExecutingAssembly().GetTypes()) {

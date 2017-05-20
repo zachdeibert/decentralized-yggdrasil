@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Threading;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
@@ -16,10 +18,12 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 			YggdrasilServer server = new YggdrasilServer(56195, yggdrasil);
 			server.Start();
 			Process ssl;
+			UriBuilder uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
+			string exe = Path.Combine(Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path)), "ssl-endpoint.exe");
 			if (Type.GetType("Mono.Runtime") == null) {
-				ssl = Process.Start("ssl-endpoint.exe", "*.mojang.com 443 localhost 56195");
+				ssl = Process.Start(exe, "*.mojang.com 443 localhost 56195");
 			} else {
-				ssl = Process.Start("mono", "ssl-endpoint.exe *.mojang.com 443 localhost 56195");
+				ssl = Process.Start("mono", string.Concat(exe, " *.mojang.com 443 localhost 56195"));
 			}
 			Thread thread = Thread.CurrentThread;
 			if (!hosts.IsOverriden) {
