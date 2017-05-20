@@ -57,7 +57,8 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 			X509Certificate2 cert = store.Certificates.Cast<X509Certificate2>().First(c => c.Subject == "CN=*.mojang.com");
 			File.WriteAllBytes("mojang.cer", cert.Export(X509ContentType.Cert));
 			UriBuilder uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
-			Process mc = Process.Start("java", string.Concat("-jar ", Path.Combine(Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path)), "decentralized-yggdrasil.jar"), " mojang.cer"));
+            File.Copy(Path.Combine(Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path)), "decentralized-yggdrasil.jar"), "decentralized-yggdrasil.jar", true);
+			Process mc = Process.Start("java", "-jar decentralized-yggdrasil.jar mojang.cer");
 			mc.WaitForExit();
 			try {
 				WebRequest.Create("http://localhost:56195/cghzddy/unlock").GetResponse().Close();
