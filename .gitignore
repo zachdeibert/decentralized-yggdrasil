@@ -345,3 +345,4 @@ local.properties
 
 # Installers
 *.exe
+/installers/debian/build/

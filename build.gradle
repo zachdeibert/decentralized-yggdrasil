@@ -4,4 +4,6 @@ jar {
 	manifest {
 		attributes "Main-Class": "com.github.zachdeibert.decentralizedyggdrasil.Main"
 	}
+
+	archiveName = "decentralized-yggdrasil.jar"
 }

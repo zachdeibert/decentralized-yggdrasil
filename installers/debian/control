@@ -1,0 +1,19 @@
+Source: decentralized-yggdrasil
+Maintainer: Zach Deibert <zachdeibert@gmail.com>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.7
+Build-Depends: debhelper (>= 9),
+               javahelper (>= 0.25),
+               default-jdk,
+               gradle,
+               mono-complete
+
+Package: decentralized-yggdrasil
+Architecture: any
+Depends: ${java:Depends}, ${misc:Depends}, ${shlibs:Depends},
+         mono-complete
+Recommends: ${java:Recommends}
+Description: Decentralized Yggdrasil Service
+  A version of the Yggdrasil authentication server that is completely
+  decentralized.

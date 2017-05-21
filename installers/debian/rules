@@ -1,0 +1,89 @@
+#!/usr/bin/make -f
+
+JAVA_HOME = /usr/lib/jvm/default-java
+GRADLE_TASKS = jar
+GRADLE_FLAGS = --offline --gradle-user-home debian/.gradlehome --no-daemon
+VERSION = $(shell cat debian/version.txt)
+
+FILES_LIST = bin/Release/batch-launcher.exe \
+             bin/Release/BouncyCastle.Crypto.dll \
+			 bin/Release/decentralized-yggdrasil \
+			 bin/Release/decentralized-yggdrasil.exe \
+			 bin/Release/decentralized-yggdrasil.jar \
+			 bin/Release/Newtonsoft.Json.dll \
+			 bin/Release/ssl-endpoint.exe
+
+ARCHIVE_FILES = ../../batch-launcher/Properties \
+                ../../batch-launcher/batch-launcher.csproj \
+				../../batch-launcher/LICENSE \
+				../../batch-launcher/Program.cs \
+                ../../Com \
+                ../../gradle \
+				../../packages \
+				../../src \
+				../../ssl-endpoint/packages \
+				../../ssl-endpoint/Properties \
+				../../ssl-endpoint/*.cs \
+				../../ssl-endpoint/LICENSE \
+				../../ssl-endpoint/*.resx \
+				../../ssl-endpoint/ssl-endpoint.csproj \
+				../../AssemblyInfo.cs \
+				../../build.gradle \
+				../../decentralized-yggdrasil \
+				../../decentralized-yggdrasil.sln \
+				../../decentralized-yggdrasil.desktop \
+				"../../Decentralized Yggdrasil.csproj" \
+				../../gradlew \
+				../../LICENSE
+
+ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+	NUMTHREADS = $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+	GRADLE_FLAGS += --parallel --max-workers=$(NUMTHREADS)
+endif
+
+%:
+	dh $@ --with javahelper
+
+override_dh_auto_build:
+	DEBIAN_BUILD=true gradle $(GRADLE_TASKS) $(GRADLE_FLAGS)
+	msbuild /p:Configuration=Release decentralized-yggdrasil.sln
+
+override_dh_auto_clean:
+	dh_auto_clean
+	find . -wholename .*build/generated-resources | xargs echo | sed -e "s|build/generated-resources|build|g" | xargs rm -Rf
+	rm -Rf .gradle debian/.gradlehome build bin
+
+override_dh_auto_install:
+	mkdir -p debian/decentralized-yggdrasil/usr/share/zachdeibert/decentralized-yggdrasil/ debian/decentralized-yggdrasil/usr/share/applications/ debian/decentralized-yggdrasil/usr/bin/
+	cp $(FILES_LIST) debian/decentralized-yggdrasil/usr/share/zachdeibert/decentralized-yggdrasil/
+	cp bin/Release/decentralized-yggdrasil.desktop debian/decentralized-yggdrasil/usr/share/applications/
+	ln -s /usr/share/zachdeibert/decentralized-yggdrasil/decentralized-yggdrasil debian/decentralized-yggdrasil/usr/bin/
+
+build/decentralized-yggdrasil_$(VERSION).orig.tar.gz: version.txt
+	mkdir -p build/
+	ln -sf ../packages ../../ssl-endpoint/packages
+	tar czf $@ $(ARCHIVE_FILES)
+
+build/decentralized-yggdrasil-$(VERSION)/build.gradle: build/decentralized-yggdrasil_$(VERSION).orig.tar.gz
+	mkdir -p build/decentralized-yggdrasil-$(VERSION)/
+	tar xzf $< -C build/decentralized-yggdrasil-$(VERSION)/
+
+build/decentralized-yggdrasil-$(VERSION)/debian/source/format: source/format
+	mkdir -p build/decentralized-yggdrasil-$(VERSION)/debian/source
+	cp $< $@
+
+build/decentralized-yggdrasil-$(VERSION)/debian/%: %
+	mkdir -p build/decentralized-yggdrasil-$(VERSION)/debian
+	cp $< $@
+
+build/decentralized-yggdrasil_$(VERSION)-1_amd64.deb: build/decentralized-yggdrasil-$(VERSION)/build.gradle build/decentralized-yggdrasil-$(VERSION)/debian/source/format $(shell find -maxdepth 1 -type f | sed -e "s|./|build/decentralized-yggdrasil-$(VERSION)/debian/|g")
+	cd build/decentralized-yggdrasil-$(VERSION)/debian && debuild -us -uc
+
+build/decentralized-yggdrasil_$(VERSION)-1_source.changes: build/decentralized-yggdrasil-$(VERSION)/build.gradle build/decentralized-yggdrasil-$(VERSION)/debian/source/format $(shell find -maxdepth 1 -type f | sed -e "s|./|build/decentralized-yggdrasil-$(VERSION)/debian/|g")
+	cd build/decentralized-yggdrasil-$(VERSION)/debian && debuild -S
+
+build/decentralized-yggdrasil_$(VERSION)-1_source.ppa.upload: build/decentralized-yggdrasil_$(VERSION)-1_source.changes
+	dput ppa:frc1810/scouting $<
+
+upload: build/decentralized-yggdrasil_$(VERSION)-1_source.ppa.upload
+	echo
