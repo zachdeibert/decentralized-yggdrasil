@@ -19,6 +19,8 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 		}
 
 		public void Run(string[] args) {
+			UriBuilder uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
+			string thisExe = Uri.UnescapeDataString(uri.Path);
 			try {
 				WebRequest.Create("http://localhost:56195/cghzddy/lock").GetResponse().Close();
 			} catch {
@@ -26,15 +28,15 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 				switch (Environment.OSVersion.Platform) {
 				case PlatformID.MacOSX:
 				case PlatformID.Unix:
-					info = new ProcessStartInfo("sudo", string.Concat("mono ", Assembly.GetExecutingAssembly().CodeBase, " server"));
+					info = new ProcessStartInfo("sudo", string.Concat("-i -A \"", thisExe, "\" server")) {
+						UseShellExecute = false
+					};
+					info.EnvironmentVariables.Add("SUDO_ASKPASS", Path.Combine(Path.GetDirectoryName(thisExe), "askpass"));
 					break;
 				default:
-					if (Type.GetType("Mono.Runtime") == null) {
-						info = new ProcessStartInfo(Assembly.GetExecutingAssembly().CodeBase, "server");
-					} else {
-						info = new ProcessStartInfo("mono", string.Concat(Assembly.GetExecutingAssembly().CodeBase, " server"));
-					}
-					info.Verb = "RunAs";
+					info = new ProcessStartInfo(thisExe, "server") {
+						Verb = "RunAs"
+					};
 					break;
 				}
 				Process.Start(info);
@@ -56,9 +58,8 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 			store.Open(OpenFlags.ReadOnly);
 			X509Certificate2 cert = store.Certificates.Cast<X509Certificate2>().First(c => c.Subject == "CN=*.mojang.com");
 			File.WriteAllBytes("mojang.cer", cert.Export(X509ContentType.Cert));
-			UriBuilder uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
-			File.Copy(Path.Combine(Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path)), "decentralized-yggdrasil.jar"), "decentralized-yggdrasil.jar", true);
-			File.Copy(Path.Combine(Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path)), "batch-launcher.exe"), "batch-launcher.exe", true);
+			File.Copy(Path.Combine(Path.GetDirectoryName(thisExe), "decentralized-yggdrasil.jar"), "decentralized-yggdrasil.jar", true);
+			File.Copy(Path.Combine(Path.GetDirectoryName(thisExe), "batch-launcher.exe"), "batch-launcher.exe", true);
 			Process mc = Process.Start("java", "-jar decentralized-yggdrasil.jar mojang.cer");
 			mc.WaitForExit();
 			try {

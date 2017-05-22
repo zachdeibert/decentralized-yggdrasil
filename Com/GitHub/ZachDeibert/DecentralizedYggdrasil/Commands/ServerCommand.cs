@@ -23,7 +23,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 			if (Type.GetType("Mono.Runtime") == null) {
 				ssl = Process.Start(exe, "*.mojang.com 443 localhost 56195");
 			} else {
-				ssl = Process.Start("mono", string.Concat(exe, " *.mojang.com 443 localhost 56195"));
+				ssl = Process.Start("mono", string.Concat("\"", exe, "\" *.mojang.com 443 localhost 56195"));
 			}
 			Thread thread = Thread.CurrentThread;
 			if (!hosts.IsOverriden) {
