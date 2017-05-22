@@ -36,6 +36,8 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Serialization" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\MainClass.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\TexturedProfile.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\Textures.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\Texture.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\AskPassCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -107,6 +110,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="decentralized-yggdrasil">
+      <DeployService-TargetDirectoryId>Linux.DesktopApplications</DeployService-TargetDirectoryId>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="askpass">
       <DeployService-TargetDirectoryId>Linux.DesktopApplications</DeployService-TargetDirectoryId>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
