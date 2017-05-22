@@ -61,6 +61,7 @@ override_dh_auto_install:
 
 build/decentralized-yggdrasil_$(VERSION).orig.tar.gz: version.txt
 	mkdir -p build/
+	nuget restore -PackagesDirectory packages packages.config
 	ln -sf ../packages ../../ssl-endpoint/packages
 	tar czf $@ $(ARCHIVE_FILES)
 
