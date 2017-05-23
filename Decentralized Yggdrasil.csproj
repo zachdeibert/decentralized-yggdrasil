@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -34,6 +34,7 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Serialization" />
     <Reference Include="System.Drawing" />
@@ -42,6 +43,12 @@
   <ItemGroup>
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\MainClass.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Ui\PasswordDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Ui\PasswordDialog.Designer.cs">
+      <DependentUpon>PasswordDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\YggdrasilServer.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\Error.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\StandardErrors.cs" />
@@ -94,15 +101,7 @@
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\AskPassCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Com\" />
-    <Folder Include="Com\GitHub\" />
-    <Folder Include="Com\GitHub\ZachDeibert\" />
-    <Folder Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\" />
-    <Folder Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\" />
-    <Folder Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\" />
-    <Folder Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="build\libs\decentralized-yggdrasil.jar">
@@ -142,5 +141,10 @@
       <DeployService-TargetDirectoryId>Linux.DesktopApplications</DeployService-TargetDirectoryId>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Ui\PasswordDialog.resx">
+      <DependentUpon>PasswordDialog.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
