@@ -5,7 +5,8 @@ GRADLE_TASKS = jar
 GRADLE_FLAGS = --offline --gradle-user-home debian/.gradlehome --no-daemon
 VERSION = $(shell cat debian/version.txt)
 
-FILES_LIST = bin/Release/batch-launcher.exe \
+FILES_LIST = bin/Release/askpass \
+             bin/Release/batch-launcher.exe \
              bin/Release/BouncyCastle.Crypto.dll \
 			 bin/Release/decentralized-yggdrasil \
 			 bin/Release/decentralized-yggdrasil.exe \
@@ -27,6 +28,7 @@ ARCHIVE_FILES = ../../batch-launcher/Properties \
 				../../ssl-endpoint/LICENSE \
 				../../ssl-endpoint/*.resx \
 				../../ssl-endpoint/ssl-endpoint.csproj \
+				../../askpass \
 				../../AssemblyInfo.cs \
 				../../build.gradle \
 				../../decentralized-yggdrasil \
@@ -61,7 +63,7 @@ override_dh_auto_install:
 
 build/decentralized-yggdrasil_$(VERSION).orig.tar.gz: version.txt
 	mkdir -p build/
-	nuget restore -PackagesDirectory packages packages.config
+	cd ../.. && nuget restore -PackagesDirectory packages packages.config
 	ln -sf ../packages ../../ssl-endpoint/packages
 	tar czf $@ $(ARCHIVE_FILES)
 
