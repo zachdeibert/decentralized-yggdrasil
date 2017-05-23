@@ -346,5 +346,6 @@ local.properties
 # Installers
 *.exe
 /installers/debian/build/
-/installers/Mac/dmg/Decentralized Yggdrasil.app/Contents/Resources/
+/installers/Mac/dmg/Decentralized Yggdrasil.app/Contents/Resources/*
+!/installers/Mac/dmg/Decentralized Yggdrasil.app/Contents/Resources/LICENSE
 *.dmg
