@@ -84,7 +84,7 @@ build/decentralized-yggdrasil_$(VERSION)-1_source.changes: build/decentralized-y
 	cd build/decentralized-yggdrasil-$(VERSION)/debian && debuild -S
 
 build/decentralized-yggdrasil_$(VERSION)-1_source.ppa.upload: build/decentralized-yggdrasil_$(VERSION)-1_source.changes
-	dput ppa:frc1810/scouting $<
+	dput ppa:zachdeibert/general $<
 
 upload: build/decentralized-yggdrasil_$(VERSION)-1_source.ppa.upload
 	echo
