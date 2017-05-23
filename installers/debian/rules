@@ -48,7 +48,7 @@ endif
 
 override_dh_auto_build:
 	DEBIAN_BUILD=true gradle $(GRADLE_TASKS) $(GRADLE_FLAGS)
-	msbuild /p:Configuration=Release decentralized-yggdrasil.sln
+	xbuild /p:Configuration=Release decentralized-yggdrasil.sln
 
 override_dh_auto_clean:
 	dh_auto_clean
@@ -86,7 +86,7 @@ build/decentralized-yggdrasil_$(VERSION)-1_source.changes: build/decentralized-y
 	cd build/decentralized-yggdrasil-$(VERSION)/debian && debuild -S
 
 build/decentralized-yggdrasil_$(VERSION)-1_source.ppa.upload: build/decentralized-yggdrasil_$(VERSION)-1_source.changes
-	dput ppa:zachdeibert/general $<
+	dput ppa:zachdeibert/misc $<
 
 upload: build/decentralized-yggdrasil_$(VERSION)-1_source.ppa.upload
 	echo
