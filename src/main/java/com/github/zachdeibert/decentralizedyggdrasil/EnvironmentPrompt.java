@@ -5,7 +5,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -189,5 +195,37 @@ public class EnvironmentPrompt extends JFrame {
 		});
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnDelete, 0, SpringLayout.SOUTH, btnLaunch);
 		contentPane.add(btnDelete);
+		JButton btnImport = new JButton("Import");
+		btnImport.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setFileFilter(new FileNameExtensionFilter("XML Files", "xml"));
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				if (chooser.showOpenDialog(EnvironmentPrompt.this) == JFileChooser.APPROVE_OPTION) {
+					try (InputStream in = new FileInputStream(chooser.getSelectedFile());
+							OutputStream out = new FileOutputStream("users.xml")) {
+						byte[] buffer = new byte[4096];
+						int len;
+						while ((len = in.read(buffer)) > 0) {
+							out.write(buffer, 0, len);
+						}
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(EnvironmentPrompt.this, "Unable to import file");
+					}
+					try {
+						new URL("http://localhost:56195/cghzddy/reload").openStream().close();
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(EnvironmentPrompt.this,
+								"Error reloading; please restart the application");
+					}
+				}
+			}
+		});
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnImport, 6, SpringLayout.EAST, btnDelete);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnImport, 0, SpringLayout.SOUTH, btnLaunch);
+		contentPane.add(btnImport);
 	}
 }

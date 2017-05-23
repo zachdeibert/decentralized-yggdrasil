@@ -92,17 +92,23 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil {
 			}
 		}
 
-		public void Start() {
-			Apis = new List<IApi>();
+		public void Reload() {
 			UserDataList users = UserDataList.Load();
 			State = TransientStateData.Load();
+			foreach (IApi api in Apis) {
+				api.Init(this, users, State, Yggdrasil);
+			}
+		}
+
+		public void Start() {
+			Apis = new List<IApi>();
 			foreach (Type t in Assembly.GetExecutingAssembly().GetTypes()) {
 				if (typeof(IApi).IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface) {
 					IApi api = (IApi) t.GetConstructor(new Type[0]).Invoke(new object[0]);
 					Apis.Add(api);
-					api.Init(this, users, State, Yggdrasil);
 				}
 			}
+			Reload();
 			Listener.Start();
 			Listener.BeginGetContext(RequestCallback, null);
 			Stopped = false;

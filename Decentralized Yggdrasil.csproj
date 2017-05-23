@@ -99,6 +99,7 @@
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\Textures.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Model\Texture.cs" />
     <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Commands\AskPassCommand.cs" />
+    <Compile Include="Com\GitHub\ZachDeibert\DecentralizedYggdrasil\Apis\ReloadApi.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
