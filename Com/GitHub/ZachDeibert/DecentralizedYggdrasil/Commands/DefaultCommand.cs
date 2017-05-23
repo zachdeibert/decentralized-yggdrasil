@@ -28,7 +28,7 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 				switch (Environment.OSVersion.Platform) {
 				case PlatformID.MacOSX:
 				case PlatformID.Unix:
-					info = new ProcessStartInfo("sudo", string.Concat("-i -A \"", thisExe, "\" server")) {
+					info = new ProcessStartInfo("sudo", string.Concat("-i -A mono \"", thisExe, "\" server")) {
 						UseShellExecute = false
 					};
 					info.EnvironmentVariables.Add("SUDO_ASKPASS", Path.Combine(Path.GetDirectoryName(thisExe), "askpass"));
