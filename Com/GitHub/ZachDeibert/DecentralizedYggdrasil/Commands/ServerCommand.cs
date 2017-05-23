@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
@@ -25,6 +27,13 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 			} else {
 				ssl = Process.Start("mono", string.Concat("\"", exe, "\" *.mojang.com 443 localhost 56195"));
 			}
+			X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+			X509Certificate2 cert;
+			do {
+				store.Open(OpenFlags.ReadOnly);
+				cert = store.Certificates.Cast<X509Certificate2>().FirstOrDefault(c => c.Subject == "CN=*.mojang.com");
+			} while (cert == null);
+			File.WriteAllBytes(Path.Combine(Path.GetDirectoryName(exe), "mojang.cer"), cert.Export(X509ContentType.Cert));
 			Thread thread = Thread.CurrentThread;
 			if (!hosts.IsOverriden) {
 				hosts.Override();

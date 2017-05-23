@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
 namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
@@ -54,10 +53,10 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 					}
 				}
 			}
-			X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
-			store.Open(OpenFlags.ReadOnly);
-			X509Certificate2 cert = store.Certificates.Cast<X509Certificate2>().First(c => c.Subject == "CN=*.mojang.com");
-			File.WriteAllBytes("mojang.cer", cert.Export(X509ContentType.Cert));
+			while (!File.Exists(Path.Combine(Path.GetDirectoryName(thisExe), "mojang.cer"))) {
+				Thread.Sleep(100);
+			}
+			File.Copy(Path.Combine(Path.GetDirectoryName(thisExe), "mojang.cer"), "mojang.cer", true);
 			File.Copy(Path.Combine(Path.GetDirectoryName(thisExe), "decentralized-yggdrasil.jar"), "decentralized-yggdrasil.jar", true);
 			File.Copy(Path.Combine(Path.GetDirectoryName(thisExe), "batch-launcher.exe"), "batch-launcher.exe", true);
 			Process mc = Process.Start("java", "-jar decentralized-yggdrasil.jar mojang.cer");
