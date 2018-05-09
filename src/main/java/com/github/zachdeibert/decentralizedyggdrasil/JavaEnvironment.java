@@ -48,7 +48,7 @@ public class JavaEnvironment {
 		try (OutputStream stream = new FileOutputStream(shell); PrintWriter ps = new PrintWriter(stream)) {
 			ps.println("#!/bin/sh");
 			ps.println();
-			ps.printf("%s -Djavax.net.ssl.trustStore=%s $*\n", which("java"), keystore.getAbsolutePath());
+			ps.printf("\"%s\" -Djavax.net.ssl.trustStore=%s $*\n", which("java"), keystore.getAbsolutePath());
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -68,7 +68,7 @@ public class JavaEnvironment {
 		try (OutputStream stream = new FileOutputStream(batch); PrintWriter ps = new PrintWriter(stream)) {
 			ps.println("@echo off");
 			ps.println();
-			ps.printf("%s -Djavax.net.ssl.trustStore=%s %%*\n", which("java.exe"), keystore.getAbsolutePath());
+			ps.printf("\"%s\" -Djavax.net.ssl.trustStore=%s %%*\n", which("java.exe"), keystore.getAbsolutePath());
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
