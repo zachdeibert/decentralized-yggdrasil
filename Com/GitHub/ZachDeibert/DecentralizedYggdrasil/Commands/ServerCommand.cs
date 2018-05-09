@@ -23,9 +23,9 @@ namespace Com.GitHub.ZachDeibert.DecentralizedYggdrasil.Commands {
 			UriBuilder uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
 			string exe = Path.Combine(Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path)), "ssl-endpoint.exe");
 			if (Type.GetType("Mono.Runtime") == null) {
-				ssl = Process.Start(exe, "*.mojang.com 443 localhost 56195");
+				ssl = Process.Start(exe, "*.mojang.com 443 127.0.0.1 56195");
 			} else {
-				ssl = Process.Start("mono", string.Concat("\"", exe, "\" *.mojang.com 443 localhost 56195"));
+				ssl = Process.Start("mono", string.Concat("\"", exe, "\" *.mojang.com 443 127.0.0.1 56195"));
 			}
 			X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
 			X509Certificate2 cert;
